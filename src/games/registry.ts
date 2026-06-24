@@ -1,5 +1,6 @@
 import type { GameEngine } from '../types/game';
 import { TruthBombEngine } from './truthbomb/TruthBombEngine';
+import { TheMoleEngine } from './themole/TheMoleEngine';
 
 /**
  * Maps a game id to its playable engine component. To ship a new game, build
@@ -7,6 +8,7 @@ import { TruthBombEngine } from './truthbomb/TruthBombEngine';
  */
 export const GAME_ENGINES: Record<string, GameEngine> = {
   'truth-bomb': TruthBombEngine,
+  'the-mole': TheMoleEngine,
 };
 
 export function getGameEngine(id: string): GameEngine | undefined {

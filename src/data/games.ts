@@ -59,6 +59,37 @@ export const GAMES: readonly Game[] = [
     maxPlayers: 12,
     hasSettings: false,
   },
+  {
+    id: 'the-mole',
+    name: 'The Mole',
+    tagline: 'One of you is lying.',
+    description:
+      'Work together to answer trivia — but one player is secretly sabotaging every round. Earn points as a group, or let the Mole drain them away. Vote to unmask the traitor at the end.',
+    instructions: [
+      'Enter all player names and pick your trivia categories.',
+      'Each player secretly receives their role — Mole or Regular Player.',
+      'As a group, discuss each trivia question out loud.',
+      'Pass the phone privately to each player to lock in their answer.',
+      'Regular Players answer correctly to grow the Group Pot.',
+      'The Mole answers wrong on purpose to fill their own Mole Pot.',
+      'After all rounds, vote together to unmask the Mole.',
+      'Catch the Mole and the group wins. Let them escape and the Mole takes everything.',
+    ],
+    icon: '🕵️',
+    accent: colors.purple,
+    minPlayers: 3,
+    maxPlayers: 10,
+    hasSettings: true,
+    settings: {
+      defaultRounds: 4,
+      minRounds: 2,
+      maxRounds: 8,
+      defaultRoundLength: 90,
+      minRoundLength: 60,
+      maxRoundLength: 120,
+      roundLengthStep: 30,
+    },
+  },
 ];
 
 export function getGame(id: string): Game | undefined {
