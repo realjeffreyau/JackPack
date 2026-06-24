@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "JackPack",
+    "slug": "jackpack",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "jackpack",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "backgroundColor": "#0F0A1E",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0F0A1E"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0F0A1E"
+      }
+    },
+    "plugins": [
+      "expo-asset"
+    ]
+  }
+}
