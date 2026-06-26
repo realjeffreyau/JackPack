@@ -18,6 +18,9 @@ interface GameOverProps {
   groupPot: number;
   molePot: number;
   winner: 'group' | 'mole' | 'tie';
+  isAutoWin?: boolean;
+  moleCaught?: boolean;
+  voteBonus?: number;
   onPlayAgain: () => void;
   onExit: () => void;
 }
@@ -27,6 +30,9 @@ export function GameOver({
   groupPot,
   molePot,
   winner,
+  isAutoWin = false,
+  moleCaught = false,
+  voteBonus = 0,
   onPlayAgain,
   onExit,
 }: GameOverProps) {
@@ -45,26 +51,41 @@ export function GameOver({
 
   const mole = players.find((p) => p.isMole);
 
-  const winnerConfig = {
-    group: {
-      emoji: '🎉',
-      title: 'MOLE CAUGHT!',
-      sub: 'The group identified the traitor. Justice is served.',
-      color: colors.success,
-    },
-    mole: {
+  const winnerConfig = (() => {
+    if (winner === 'tie') {
+      return {
+        emoji: '🤝',
+        title: "IT'S A TIE",
+        sub: 'Nobody pulls ahead. The Mole lives to sabotage another day.',
+        color: colors.yellow,
+      };
+    }
+    if (winner === 'group') {
+      return {
+        emoji: isAutoWin ? '💰' : '🎉',
+        title: isAutoWin ? 'JACKPOT!' : 'GROUP WINS!',
+        sub: isAutoWin
+          ? 'The group answered enough correctly to claim the prize before the Mole could escape.'
+          : moleCaught
+          ? 'Caught by majority vote — and the group held the bigger pot.'
+          : "The Mole slipped the vote, but the group's pot was still bigger.",
+        color: colors.success,
+      };
+    }
+    return {
       emoji: '🕵️',
-      title: 'MOLE ESCAPES!',
-      sub: `${mole?.name ?? 'The Mole'} fooled everyone and vanished into the night.`,
+      title: isAutoWin ? 'MOLE POT FULL!' : 'MOLE WINS!',
+      sub: isAutoWin
+        ? `${mole?.name ?? 'The Mole'} sabotaged enough rounds to fill the pot and vanish.`
+        : moleCaught
+        ? `Caught by the vote, but ${mole?.name ?? 'the Mole'}'s pot was still the biggest. Brutal.`
+        : `${mole?.name ?? 'The Mole'} dodged the vote and walked off with the bigger pot.`,
       color: colors.purple,
-    },
-    tie: {
-      emoji: '🤝',
-      title: 'IT\'S A TIE',
-      sub: 'Nobody wins. The Mole lives to sabotage another day.',
-      color: colors.yellow,
-    },
-  }[winner];
+    };
+  })();
+
+  const showGroupBonus = !isAutoWin && voteBonus > 0 && moleCaught;
+  const showMoleBonus = !isAutoWin && voteBonus > 0 && !moleCaught;
 
   const getPlayerVoteName = (votedForId: string | null) => {
     if (!votedForId) return '—';
@@ -117,8 +138,11 @@ export function GameOver({
               },
             ]}
           >
-            {winner === 'group' ? groupPot.toLocaleString() : '0'}
+            {groupPot.toLocaleString()}
           </Text>
+          {showGroupBonus && (
+            <Text style={[styles.potBonus, { color: colors.success }]}>+{voteBonus.toLocaleString()}</Text>
+          )}
           {winner === 'group' && <Text style={styles.potWon}>WON</Text>}
         </View>
         <View style={styles.potDivider} />
@@ -134,32 +158,37 @@ export function GameOver({
               },
             ]}
           >
-            {winner === 'mole' ? molePot.toLocaleString() : '0'}
+            {molePot.toLocaleString()}
           </Text>
+          {showMoleBonus && (
+            <Text style={[styles.potBonus, { color: colors.purple }]}>+{voteBonus.toLocaleString()}</Text>
+          )}
           {winner === 'mole' && <Text style={styles.potWon}>WON</Text>}
         </View>
       </View>
 
-      <View style={styles.votes}>
-        <Text style={styles.votesTitle}>VOTING RESULTS</Text>
-        {players.map((p) => (
-          <View
-            key={p.id}
-            style={[styles.voteRow, p.isMole && styles.voteRowMole]}
-          >
-            <View style={styles.voteLeft}>
-              <Text style={styles.voteName}>
-                {p.name}
-                {p.isMole ? ' 🕵️' : ''}
-              </Text>
-              <Text style={styles.voteFor}>Voted: {getPlayerVoteName(p.votedFor)}</Text>
+      {!isAutoWin && (
+        <View style={styles.votes}>
+          <Text style={styles.votesTitle}>VOTING RESULTS</Text>
+          {players.map((p) => (
+            <View
+              key={p.id}
+              style={[styles.voteRow, p.isMole && styles.voteRowMole]}
+            >
+              <View style={styles.voteLeft}>
+                <Text style={styles.voteName}>
+                  {p.name}
+                  {p.isMole ? ' 🕵️' : ''}
+                </Text>
+                <Text style={styles.voteFor}>Voted: {getPlayerVoteName(p.votedFor)}</Text>
+              </View>
+              <View style={styles.voteBadge}>
+                <Text style={styles.voteBadgeText}>{p.votesReceived} vote{p.votesReceived !== 1 ? 's' : ''}</Text>
+              </View>
             </View>
-            <View style={styles.voteBadge}>
-              <Text style={styles.voteBadgeText}>{p.votesReceived} vote{p.votesReceived !== 1 ? 's' : ''}</Text>
-            </View>
-          </View>
-        ))}
-      </View>
+          ))}
+        </View>
+      )}
 
       <PrimaryButton label="Play Again" icon="refresh" color={colors.purple} onPress={onPlayAgain} />
       <PrimaryButton
@@ -250,6 +279,11 @@ const styles = StyleSheet.create({
   potValue: {
     fontFamily: fonts.display,
     fontSize: 28,
+  },
+  potBonus: {
+    fontFamily: fonts.bodyExtra,
+    fontSize: 14,
+    marginTop: 2,
   },
   potWon: {
     fontFamily: fonts.bodyExtra,

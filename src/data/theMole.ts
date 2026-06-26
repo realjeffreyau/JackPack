@@ -1,21 +1,24 @@
-export type MoleCategory = 'general' | 'science' | 'history';
+﻿export type MoleCategory = 'general' | 'science' | 'history';
+export type MoleDifficulty = 'easy' | 'medium' | 'hard' | 'impossible';
 
 export interface MoleQuestion {
   id: string;
   category: MoleCategory;
+  difficulty: MoleDifficulty;
   question: string;
   options: [string, string, string, string];
   correctIndex: 0 | 1 | 2 | 3;
 }
 
 export const MOLE_QUESTIONS: MoleQuestion[] = [
-  // ── GENERAL KNOWLEDGE ──────────────────────────────────────────────────────
+  // â”€â”€ GENERAL KNOWLEDGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'g01',
     category: 'general',
     question: 'How many sides does a hexagon have?',
     options: ['Five', 'Six', 'Seven', 'Eight'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g02',
@@ -23,6 +26,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the capital city of Australia?',
     options: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g03',
@@ -30,6 +34,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many strings does a standard guitar have?',
     options: ['Four', 'Five', 'Six', 'Seven'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g04',
@@ -37,6 +42,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the largest ocean on Earth?',
     options: ['Atlantic', 'Indian', 'Arctic', 'Pacific'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'g05',
@@ -44,6 +50,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which planet is known as the Red Planet?',
     options: ['Venus', 'Mars', 'Jupiter', 'Saturn'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g06',
@@ -51,6 +58,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many players are on a standard basketball team on court?',
     options: ['Four', 'Five', 'Six', 'Seven'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g07',
@@ -58,6 +66,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What currency is used in Japan?',
     options: ['Yuan', 'Won', 'Yen', 'Ringgit'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g08',
@@ -65,6 +74,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Who wrote "Romeo and Juliet"?',
     options: ['Charles Dickens', 'William Shakespeare', 'Jane Austen', 'Geoffrey Chaucer'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g09',
@@ -72,6 +82,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the smallest country in the world by area?',
     options: ['Monaco', 'San Marino', 'Liechtenstein', 'Vatican City'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'g10',
@@ -79,6 +90,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many minutes are in a full day?',
     options: ['1,200', '1,440', '1,600', '2,400'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g11',
@@ -86,6 +98,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the most spoken language in the world by number of native speakers?',
     options: ['English', 'Spanish', 'Mandarin Chinese', 'Hindi'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g12',
@@ -93,6 +106,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'In chess, which piece can only move diagonally?',
     options: ['Rook', 'Knight', 'Bishop', 'Queen'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g13',
@@ -100,6 +114,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What gas do plants absorb from the atmosphere during photosynthesis?',
     options: ['Oxygen', 'Nitrogen', 'Carbon Dioxide', 'Hydrogen'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g14',
@@ -107,6 +122,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many bones are in the adult human body?',
     options: ['106', '176', '206', '256'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g15',
@@ -114,6 +130,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country invented pizza?',
     options: ['Greece', 'Spain', 'France', 'Italy'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'g16',
@@ -121,6 +138,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the chemical symbol for gold?',
     options: ['Go', 'Gd', 'Au', 'Ag'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g17',
@@ -128,6 +146,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many rings are on the Olympic flag?',
     options: ['Three', 'Four', 'Five', 'Six'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g18',
@@ -135,6 +154,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the tallest mountain in the world?',
     options: ['K2', 'Mount Kilimanjaro', 'Mount Everest', 'Mont Blanc'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g19',
@@ -142,6 +162,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which instrument has 88 keys?',
     options: ['Organ', 'Piano', 'Accordion', 'Harpsichord'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g20',
@@ -149,6 +170,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the hardest natural substance on Earth?',
     options: ['Granite', 'Quartz', 'Diamond', 'Titanium'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g21',
@@ -161,6 +183,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
       'High Text Transmission Protocol',
     ],
     correctIndex: 0,
+    difficulty: 'medium',
   },
   {
     id: 'g22',
@@ -168,6 +191,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country is home to the kangaroo?',
     options: ['New Zealand', 'South Africa', 'Brazil', 'Australia'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'g23',
@@ -175,6 +199,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many weeks are in a year?',
     options: ['48', '50', '52', '54'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g24',
@@ -182,6 +207,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What sport is played at Wimbledon?',
     options: ['Cricket', 'Tennis', 'Badminton', 'Squash'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g25',
@@ -189,6 +215,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the name of the fictional detective created by Arthur Conan Doyle?',
     options: ['Hercule Poirot', 'Philip Marlowe', 'Sherlock Holmes', 'Sam Spade'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g26',
@@ -196,6 +223,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which element has the atomic number 1?',
     options: ['Helium', 'Hydrogen', 'Lithium', 'Carbon'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g27',
@@ -203,6 +231,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'In what city is the Eiffel Tower located?',
     options: ['Rome', 'Berlin', 'Madrid', 'Paris'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'g28',
@@ -210,6 +239,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the square root of 144?',
     options: ['10', '11', '12', '14'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g29',
@@ -217,6 +247,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What color is a typical school bus in the United States?',
     options: ['Orange', 'Yellow', 'Red', 'Green'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g30',
@@ -224,6 +255,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country is the Colosseum located in?',
     options: ['Greece', 'Spain', 'Italy', 'Turkey'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g31',
@@ -231,6 +263,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the longest river in the world?',
     options: ['Amazon', 'Yangtze', 'Mississippi', 'Nile'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'g32',
@@ -238,6 +271,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many continents are there on Earth?',
     options: ['Five', 'Six', 'Seven', 'Eight'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g33',
@@ -250,6 +284,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
       'Universal Routing Label',
     ],
     correctIndex: 0,
+    difficulty: 'medium',
   },
   {
     id: 'g34',
@@ -257,6 +292,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which famous scientist developed the theory of relativity?',
     options: ['Isaac Newton', 'Nikola Tesla', 'Albert Einstein', 'Stephen Hawking'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g35',
@@ -264,6 +300,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the capital of Canada?',
     options: ['Toronto', 'Vancouver', 'Ottawa', 'Montreal'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g36',
@@ -271,6 +308,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'In which sport would you perform a slam dunk?',
     options: ['Volleyball', 'Basketball', 'Handball', 'Water Polo'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g37',
@@ -278,6 +316,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the main ingredient in guacamole?',
     options: ['Tomato', 'Mango', 'Avocado', 'Papaya'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g38',
@@ -285,6 +324,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many holes are on a standard golf course?',
     options: ['9', '12', '18', '24'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'g39',
@@ -292,6 +332,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What language is spoken in Brazil?',
     options: ['Spanish', 'Portuguese', 'French', 'Italian'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'g40',
@@ -299,15 +340,17 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which animal is the fastest on land?',
     options: ['Lion', 'Horse', 'Cheetah', 'Greyhound'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
 
-  // ── SCIENCE & NATURE ───────────────────────────────────────────────────────
+  // â”€â”€ SCIENCE & NATURE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 's01',
     category: 'science',
     question: 'What is the powerhouse of the cell?',
     options: ['Nucleus', 'Ribosome', 'Mitochondria', 'Golgi apparatus'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's02',
@@ -320,6 +363,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
       '30,000 km/s',
     ],
     correctIndex: 0,
+    difficulty: 'medium',
   },
   {
     id: 's03',
@@ -327,6 +371,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many chromosomes do healthy humans typically have?',
     options: ['23', '44', '46', '48'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's04',
@@ -334,6 +379,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the chemical formula for water?',
     options: ['HO', 'H2O', 'H3O', 'H2O2'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 's05',
@@ -341,6 +387,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the closest star to Earth (besides the Sun)?',
     options: ['Sirius', 'Betelgeuse', 'Proxima Centauri', 'Vega'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's06',
@@ -348,6 +395,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What type of animal is a dolphin?',
     options: ['Fish', 'Reptile', 'Mammal', 'Amphibian'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's07',
@@ -355,6 +403,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which organ in the human body produces insulin?',
     options: ['Liver', 'Kidney', 'Stomach', 'Pancreas'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 's08',
@@ -362,6 +411,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the most abundant gas in Earth\'s atmosphere?',
     options: ['Oxygen', 'Carbon Dioxide', 'Nitrogen', 'Argon'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's09',
@@ -369,6 +419,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many planets are in our solar system?',
     options: ['7', '8', '9', '10'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 's10',
@@ -376,6 +427,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What force keeps planets in orbit around the Sun?',
     options: ['Magnetism', 'Electricity', 'Gravity', 'Dark energy'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's11',
@@ -383,6 +435,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the atomic number of carbon?',
     options: ['4', '6', '8', '12'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 's12',
@@ -390,6 +443,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the largest organ in the human body?',
     options: ['Liver', 'Brain', 'Lungs', 'Skin'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 's13',
@@ -397,6 +451,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which gas do humans exhale when they breathe out?',
     options: ['Oxygen', 'Nitrogen', 'Carbon Dioxide', 'Hydrogen'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's14',
@@ -404,6 +459,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the process by which plants make their own food using sunlight?',
     options: ['Respiration', 'Photosynthesis', 'Transpiration', 'Fermentation'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 's15',
@@ -411,6 +467,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the unit of electrical resistance?',
     options: ['Volt', 'Ampere', 'Watt', 'Ohm'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 's16',
@@ -418,6 +475,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What type of rock is formed from cooled lava?',
     options: ['Sedimentary', 'Metamorphic', 'Igneous', 'Limestone'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's17',
@@ -425,13 +483,15 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the largest planet in our solar system?',
     options: ['Saturn', 'Uranus', 'Neptune', 'Jupiter'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 's18',
     category: 'science',
     question: 'What is the boiling point of water at sea level in Celsius?',
-    options: ['90°C', '95°C', '100°C', '110°C'],
+    options: ['90Â°C', '95Â°C', '100Â°C', '110Â°C'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's19',
@@ -439,6 +499,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which blood type is known as the "universal donor"?',
     options: ['A+', 'O+', 'O-', 'AB-'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's20',
@@ -446,6 +507,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many chambers does the human heart have?',
     options: ['Two', 'Three', 'Four', 'Five'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's21',
@@ -453,6 +515,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the chemical symbol for iron?',
     options: ['Ir', 'In', 'Fe', 'Fi'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's22',
@@ -465,6 +528,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
       'Deoxynitric Acid',
     ],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 's23',
@@ -472,6 +536,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the name of the layer of the atmosphere closest to Earth\'s surface?',
     options: ['Stratosphere', 'Mesosphere', 'Troposphere', 'Thermosphere'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's24',
@@ -479,6 +544,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What does a seismograph measure?',
     options: ['Wind speed', 'Earthquakes', 'Sea depth', 'Air pressure'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 's25',
@@ -486,6 +552,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which vitamin does sunlight help the human body produce?',
     options: ['Vitamin A', 'Vitamin B12', 'Vitamin C', 'Vitamin D'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 's26',
@@ -493,6 +560,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the name of the process where a caterpillar transforms into a butterfly?',
     options: ['Metamorphosis', 'Hibernation', 'Evolution', 'Symbiosis'],
     correctIndex: 0,
+    difficulty: 'medium',
   },
   {
     id: 's27',
@@ -500,6 +568,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How many teeth does an adult human typically have?',
     options: ['28', '30', '32', '34'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's28',
@@ -507,6 +576,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the term for animals that eat both plants and meat?',
     options: ['Herbivores', 'Carnivores', 'Omnivores', 'Insectivores'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's29',
@@ -514,13 +584,15 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which planet has the most moons in our solar system?',
     options: ['Jupiter', 'Saturn', 'Uranus', 'Neptune'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 's30',
     category: 'science',
     question: 'What is the freezing point of water in Fahrenheit?',
-    options: ['0°F', '28°F', '32°F', '36°F'],
+    options: ['0Â°F', '28Â°F', '32Â°F', '36Â°F'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's31',
@@ -528,6 +600,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the name of the scientist who proposed the theory of evolution by natural selection?',
     options: ['Gregor Mendel', 'Louis Pasteur', 'Charles Darwin', 'Carl Linnaeus'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's32',
@@ -535,6 +608,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What color is the blood of an octopus?',
     options: ['Red', 'Green', 'Blue', 'Purple'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's33',
@@ -542,6 +616,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the most common element in the universe?',
     options: ['Oxygen', 'Carbon', 'Helium', 'Hydrogen'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 's34',
@@ -549,6 +624,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What part of the plant conducts water from the roots to the leaves?',
     options: ['Phloem', 'Epidermis', 'Xylem', 'Cambium'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's35',
@@ -556,6 +632,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the name for the study of fossils?',
     options: ['Archaeology', 'Geology', 'Palaeontology', 'Anthropology'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's36',
@@ -563,6 +640,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which planet rotates on its side with an axial tilt of about 98 degrees?',
     options: ['Neptune', 'Saturn', 'Venus', 'Uranus'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 's37',
@@ -570,6 +648,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the name of the bone that protects the brain?',
     options: ['Femur', 'Sternum', 'Skull', 'Pelvis'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's38',
@@ -577,6 +656,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What natural phenomenon is measured on the Richter scale?',
     options: ['Hurricanes', 'Volcanic eruptions', 'Earthquakes', 'Tornadoes'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's39',
@@ -584,6 +664,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the chemical symbol for sodium?',
     options: ['So', 'Sd', 'Na', 'Nm'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 's40',
@@ -591,15 +672,17 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'How long does light from the Sun take to reach Earth (approximately)?',
     options: ['1 minute', '8 minutes', '18 minutes', '1 hour'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
 
-  // ── HISTORY & GEOGRAPHY ────────────────────────────────────────────────────
+  // â”€â”€ HISTORY & GEOGRAPHY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
     id: 'h01',
     category: 'history',
     question: 'In which year did World War II end?',
     options: ['1943', '1944', '1945', '1946'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h02',
@@ -607,6 +690,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Who was the first person to walk on the Moon?',
     options: ['Buzz Aldrin', 'Yuri Gagarin', 'Neil Armstrong', 'John Glenn'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h03',
@@ -614,6 +698,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which empire built the Colosseum in Rome?',
     options: ['Greek Empire', 'Byzantine Empire', 'Ottoman Empire', 'Roman Empire'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h04',
@@ -621,6 +706,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What was the name of the ship that sank in 1912 after hitting an iceberg?',
     options: ['Lusitania', 'Britannic', 'Titanic', 'Olympic'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h05',
@@ -628,6 +714,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country was the first to give women the right to vote?',
     options: ['United States', 'United Kingdom', 'New Zealand', 'France'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h06',
@@ -635,6 +722,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Who was the first President of the United States?',
     options: ['John Adams', 'Thomas Jefferson', 'Benjamin Franklin', 'George Washington'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h07',
@@ -642,6 +730,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'In which year did the Berlin Wall fall?',
     options: ['1987', '1988', '1989', '1990'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h08',
@@ -654,6 +743,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
       'The Lighthouse of Alexandria',
     ],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h09',
@@ -661,6 +751,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Who painted the Mona Lisa?',
     options: ['Michelangelo', 'Raphael', 'Leonardo da Vinci', 'Donatello'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h10',
@@ -668,6 +759,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country is the largest in the world by area?',
     options: ['Canada', 'China', 'United States', 'Russia'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h11',
@@ -675,6 +767,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What year did the French Revolution begin?',
     options: ['1776', '1789', '1799', '1804'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'h12',
@@ -682,6 +775,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country gifted the Statue of Liberty to the United States?',
     options: ['Britain', 'Germany', 'France', 'Spain'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h13',
@@ -689,6 +783,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the capital of Japan?',
     options: ['Osaka', 'Kyoto', 'Hiroshima', 'Tokyo'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h14',
@@ -696,6 +791,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Who was the Egyptian queen famous for her relationship with Julius Caesar and Mark Antony?',
     options: ['Nefertiti', 'Cleopatra', 'Hatshepsut', 'Isis'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'h15',
@@ -703,6 +799,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which ocean lies between Europe/Africa and the Americas?',
     options: ['Pacific Ocean', 'Indian Ocean', 'Atlantic Ocean', 'Arctic Ocean'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h16',
@@ -710,6 +807,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'In which city was the Titanic built?',
     options: ['London', 'Liverpool', 'Glasgow', 'Belfast'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h17',
@@ -717,6 +815,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Who was the first woman to win a Nobel Prize?',
     options: ['Rosalind Franklin', 'Ada Lovelace', 'Marie Curie', 'Florence Nightingale'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h18',
@@ -724,6 +823,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country is home to the Amazon Rainforest (largest portion)?',
     options: ['Colombia', 'Peru', 'Venezuela', 'Brazil'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h19',
@@ -736,6 +836,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
       'The Yellow River Barrier',
     ],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h20',
@@ -743,6 +844,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'In what year did the United States declare independence?',
     options: ['1770', '1774', '1776', '1783'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h21',
@@ -750,6 +852,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which continent is the Sahara Desert located on?',
     options: ['Asia', 'Australia', 'South America', 'Africa'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h22',
@@ -757,6 +860,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Who was the leader of Nazi Germany during World War II?',
     options: ['Heinrich Himmler', 'Hermann Göring', 'Adolf Hitler', 'Joseph Goebbels'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h23',
@@ -764,6 +868,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the capital of Brazil?',
     options: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h24',
@@ -771,6 +876,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'In which year did Christopher Columbus first reach the Americas?',
     options: ['1488', '1490', '1492', '1498'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h25',
@@ -778,6 +884,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which ancient civilization built the Machu Picchu complex?',
     options: ['Aztec', 'Maya', 'Inca', 'Olmec'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h26',
@@ -785,6 +892,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the capital of South Africa\'s government (executive)?',
     options: ['Cape Town', 'Johannesburg', 'Pretoria', 'Durban'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h27',
@@ -792,6 +900,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which war was triggered by the assassination of Archduke Franz Ferdinand?',
     options: ['World War II', 'The Crimean War', 'The Boer War', 'World War I'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h28',
@@ -799,6 +908,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'The Great Barrier Reef is located off the coast of which country?',
     options: ['New Zealand', 'Indonesia', 'Philippines', 'Australia'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h29',
@@ -806,6 +916,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Who was the first man to circumnavigate the globe?',
     options: ['Christopher Columbus', 'Vasco da Gama', 'Ferdinand Magellan', 'Francis Drake'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h30',
@@ -813,6 +924,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What is the capital of Germany?',
     options: ['Munich', 'Hamburg', 'Frankfurt', 'Berlin'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h31',
@@ -820,6 +932,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which US state is home to the Grand Canyon?',
     options: ['Utah', 'Nevada', 'Arizona', 'Colorado'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h32',
@@ -827,6 +940,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'In which century did the Renaissance begin in Europe?',
     options: ['12th', '13th', '14th', '15th'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h33',
@@ -839,6 +953,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
       'The Aurelian Wall',
     ],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'h34',
@@ -846,6 +961,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country has the most UNESCO World Heritage Sites?',
     options: ['China', 'France', 'Italy', 'Spain'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h35',
@@ -853,6 +969,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What was the name of the first artificial satellite launched into space?',
     options: ['Vostok', 'Sputnik', 'Explorer', 'Luna'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'h36',
@@ -860,6 +977,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which city is known as "The Eternal City"?',
     options: ['Athens', 'Cairo', 'Jerusalem', 'Rome'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h37',
@@ -867,6 +985,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Where were the first modern Olympic Games held in 1896?',
     options: ['Paris', 'London', 'Athens', 'Rome'],
     correctIndex: 2,
+    difficulty: 'medium',
   },
   {
     id: 'h38',
@@ -874,6 +993,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'Which country has the world\'s longest coastline?',
     options: ['Norway', 'Russia', 'Australia', 'Canada'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
   {
     id: 'h39',
@@ -881,6 +1001,7 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'What empire did Genghis Khan found?',
     options: ['Ottoman Empire', 'Mongol Empire', 'Tang Dynasty', 'Persian Empire'],
     correctIndex: 1,
+    difficulty: 'medium',
   },
   {
     id: 'h40',
@@ -888,5 +1009,207 @@ export const MOLE_QUESTIONS: MoleQuestion[] = [
     question: 'The River Thames runs through which city?',
     options: ['Edinburgh', 'Dublin', 'Manchester', 'London'],
     correctIndex: 3,
+    difficulty: 'medium',
   },
+
+  // ── EASY ──────────────────────────────────────────────────────────────────
+  // General
+  { id: 'e_g01', category: 'general', difficulty: 'easy', question: 'What is the capital of France?', options: ['London', 'Madrid', 'Paris', 'Berlin'], correctIndex: 2 },
+  { id: 'e_g02', category: 'general', difficulty: 'easy', question: 'How many months are in a year?', options: ['10', '11', '12', '13'], correctIndex: 2 },
+  { id: 'e_g03', category: 'general', difficulty: 'easy', question: 'What color do you get when you mix red and blue paint?', options: ['Green', 'Orange', 'Purple', 'Brown'], correctIndex: 2 },
+  { id: 'e_g04', category: 'general', difficulty: 'easy', question: 'How many days are in a week?', options: ['5', '6', '7', '8'], correctIndex: 2 },
+  { id: 'e_g05', category: 'general', difficulty: 'easy', question: 'Which animal is traditionally known as man\'s best friend?', options: ['Cat', 'Dog', 'Horse', 'Rabbit'], correctIndex: 1 },
+  { id: 'e_g06', category: 'general', difficulty: 'easy', question: 'What is the largest continent on Earth?', options: ['Africa', 'North America', 'Asia', 'Europe'], correctIndex: 2 },
+  { id: 'e_g07', category: 'general', difficulty: 'easy', question: 'What sport is played at Wimbledon?', options: ['Golf', 'Tennis', 'Cricket', 'Badminton'], correctIndex: 1 },
+  { id: 'e_g08', category: 'general', difficulty: 'easy', question: 'What is the capital city of the United States?', options: ['New York', 'Los Angeles', 'Chicago', 'Washington D.C.'], correctIndex: 3 },
+  { id: 'e_g09', category: 'general', difficulty: 'easy', question: 'How many sides does a triangle have?', options: ['Two', 'Three', 'Four', 'Five'], correctIndex: 1 },
+  { id: 'e_g10', category: 'general', difficulty: 'easy', question: 'Which planet do we live on?', options: ['Mars', 'Venus', 'Earth', 'Jupiter'], correctIndex: 2 },
+  { id: 'e_g11', category: 'general', difficulty: 'easy', question: 'What color is a stop sign?', options: ['Orange', 'Yellow', 'Red', 'Blue'], correctIndex: 2 },
+  { id: 'e_g12', category: 'general', difficulty: 'easy', question: 'How many wheels does a standard bicycle have?', options: ['One', 'Two', 'Three', 'Four'], correctIndex: 1 },
+  { id: 'e_g13', category: 'general', difficulty: 'easy', question: 'What instrument has black and white keys?', options: ['Guitar', 'Violin', 'Piano', 'Trumpet'], correctIndex: 2 },
+  { id: 'e_g14', category: 'general', difficulty: 'easy', question: 'How many players are on a soccer team on the field?', options: ['9', '10', '11', '12'], correctIndex: 2 },
+  { id: 'e_g15', category: 'general', difficulty: 'easy', question: 'What is the tallest mountain on Earth?', options: ['K2', 'Mont Blanc', 'Kilimanjaro', 'Mount Everest'], correctIndex: 3 },
+  { id: 'e_g16', category: 'general', difficulty: 'easy', question: 'What language is spoken in Brazil?', options: ['Spanish', 'French', 'Portuguese', 'English'], correctIndex: 2 },
+  { id: 'e_g17', category: 'general', difficulty: 'easy', question: 'Which ocean lies between Europe and North America?', options: ['Pacific', 'Indian', 'Atlantic', 'Arctic'], correctIndex: 2 },
+  { id: 'e_g18', category: 'general', difficulty: 'easy', question: 'What is the result of 7 × 8?', options: ['48', '54', '56', '64'], correctIndex: 2 },
+  { id: 'e_g19', category: 'general', difficulty: 'easy', question: 'Which country is home to the kangaroo?', options: ['New Zealand', 'South Africa', 'Australia', 'India'], correctIndex: 2 },
+  { id: 'e_g20', category: 'general', difficulty: 'easy', question: 'What do you call a baby dog?', options: ['Kitten', 'Cub', 'Foal', 'Puppy'], correctIndex: 3 },
+
+  // Science
+  { id: 'e_s01', category: 'science', difficulty: 'easy', question: 'What gas do plants absorb from the air to make food?', options: ['Oxygen', 'Nitrogen', 'Carbon dioxide', 'Hydrogen'], correctIndex: 2 },
+  { id: 'e_s02', category: 'science', difficulty: 'easy', question: 'What is the chemical symbol for water?', options: ['CO2', 'H2O', 'O2', 'NaCl'], correctIndex: 1 },
+  { id: 'e_s03', category: 'science', difficulty: 'easy', question: 'How many legs does an insect have?', options: ['Four', 'Six', 'Eight', 'Ten'], correctIndex: 1 },
+  { id: 'e_s04', category: 'science', difficulty: 'easy', question: 'What force pulls objects toward the ground?', options: ['Magnetism', 'Friction', 'Gravity', 'Inertia'], correctIndex: 2 },
+  { id: 'e_s05', category: 'science', difficulty: 'easy', question: 'What is the closest star to Earth?', options: ['Proxima Centauri', 'Sirius', 'The Sun', 'Betelgeuse'], correctIndex: 2 },
+  { id: 'e_s06', category: 'science', difficulty: 'easy', question: 'What is the hardest natural substance on Earth?', options: ['Quartz', 'Granite', 'Ruby', 'Diamond'], correctIndex: 3 },
+  { id: 'e_s07', category: 'science', difficulty: 'easy', question: 'How many bones are in the adult human body?', options: ['156', '186', '206', '256'], correctIndex: 2 },
+  { id: 'e_s08', category: 'science', difficulty: 'easy', question: 'What is the powerhouse of the cell?', options: ['Nucleus', 'Ribosome', 'Cell wall', 'Mitochondria'], correctIndex: 3 },
+  { id: 'e_s09', category: 'science', difficulty: 'easy', question: 'Which planet is the largest in our solar system?', options: ['Saturn', 'Neptune', 'Jupiter', 'Uranus'], correctIndex: 2 },
+  { id: 'e_s10', category: 'science', difficulty: 'easy', question: 'What do you call animals that eat only plants?', options: ['Carnivores', 'Omnivores', 'Herbivores', 'Insectivores'], correctIndex: 2 },
+  { id: 'e_s11', category: 'science', difficulty: 'easy', question: 'What is the boiling point of water at sea level?', options: ['90Â°C', '95Â°C', '100Â°C', '110Â°C'], correctIndex: 2 },
+  { id: 'e_s12', category: 'science', difficulty: 'easy', question: 'What gas do humans exhale?', options: ['Oxygen', 'Nitrogen', 'Carbon dioxide', 'Hydrogen'], correctIndex: 2 },
+  { id: 'e_s13', category: 'science', difficulty: 'easy', question: 'How many hearts does an octopus have?', options: ['One', 'Two', 'Three', 'Four'], correctIndex: 2 },
+  { id: 'e_s14', category: 'science', difficulty: 'easy', question: 'What type of animal is a whale?', options: ['Fish', 'Reptile', 'Amphibian', 'Mammal'], correctIndex: 3 },
+  { id: 'e_s15', category: 'science', difficulty: 'easy', question: 'What part of a plant captures sunlight to make food?', options: ['Roots', 'Stem', 'Leaves', 'Flowers'], correctIndex: 2 },
+  { id: 'e_s16', category: 'science', difficulty: 'easy', question: 'What is the most abundant gas in Earth\'s atmosphere?', options: ['Oxygen', 'Nitrogen', 'Argon', 'Carbon dioxide'], correctIndex: 1 },
+  { id: 'e_s17', category: 'science', difficulty: 'easy', question: 'What do caterpillars transform into?', options: ['Beetles', 'Flies', 'Butterflies or moths', 'Bees'], correctIndex: 2 },
+  { id: 'e_s18', category: 'science', difficulty: 'easy', question: 'What is the chemical symbol for gold?', options: ['Go', 'Ag', 'Au', 'Gd'], correctIndex: 2 },
+  { id: 'e_s19', category: 'science', difficulty: 'easy', question: 'What orbits around the nucleus of an atom?', options: ['Protons', 'Neutrons', 'Electrons', 'Quarks'], correctIndex: 2 },
+  { id: 'e_s20', category: 'science', difficulty: 'easy', question: 'What is the freezing point of water at sea level?', options: ['-10Â°C', '-5Â°C', '0Â°C', '5Â°C'], correctIndex: 2 },
+
+  // History
+  { id: 'e_h01', category: 'history', difficulty: 'easy', question: 'Who was the first President of the United States?', options: ['Thomas Jefferson', 'George Washington', 'John Adams', 'Benjamin Franklin'], correctIndex: 1 },
+  { id: 'e_h02', category: 'history', difficulty: 'easy', question: 'Which country built the Great Wall?', options: ['Japan', 'Korea', 'China', 'Mongolia'], correctIndex: 2 },
+  { id: 'e_h03', category: 'history', difficulty: 'easy', question: 'In which city is the Eiffel Tower located?', options: ['London', 'Rome', 'Berlin', 'Paris'], correctIndex: 3 },
+  { id: 'e_h04', category: 'history', difficulty: 'easy', question: 'What year did World War II end?', options: ['1943', '1944', '1945', '1946'], correctIndex: 2 },
+  { id: 'e_h05', category: 'history', difficulty: 'easy', question: 'Who painted the Mona Lisa?', options: ['Michelangelo', 'Raphael', 'Leonardo da Vinci', 'Picasso'], correctIndex: 2 },
+  { id: 'e_h06', category: 'history', difficulty: 'easy', question: 'What ship sank after hitting an iceberg in 1912?', options: ['Lusitania', 'Titanic', 'Bismarck', 'Olympic'], correctIndex: 1 },
+  { id: 'e_h07', category: 'history', difficulty: 'easy', question: 'What was the name of the first artificial satellite launched into space?', options: ['Explorer', 'Apollo', 'Sputnik', 'Vostok'], correctIndex: 2 },
+  { id: 'e_h08', category: 'history', difficulty: 'easy', question: 'Who was the first person to walk on the Moon?', options: ['Buzz Aldrin', 'Neil Armstrong', 'Yuri Gagarin', 'John Glenn'], correctIndex: 1 },
+  { id: 'e_h09', category: 'history', difficulty: 'easy', question: 'Which ancient wonder was a giant statue on the Greek island of Rhodes?', options: ['The Great Pyramid', 'The Hanging Gardens', 'The Colossus of Rhodes', 'The Lighthouse of Alexandria'], correctIndex: 2 },
+  { id: 'e_h10', category: 'history', difficulty: 'easy', question: 'What year did the Berlin Wall fall?', options: ['1986', '1987', '1988', '1989'], correctIndex: 3 },
+  { id: 'e_h11', category: 'history', difficulty: 'easy', question: 'Where were the first modern Olympic Games held in 1896?', options: ['Paris', 'London', 'Athens', 'Stockholm'], correctIndex: 2 },
+  { id: 'e_h12', category: 'history', difficulty: 'easy', question: 'Who invented the telephone?', options: ['Thomas Edison', 'Nikola Tesla', 'Alexander Graham Bell', 'Guglielmo Marconi'], correctIndex: 2 },
+  { id: 'e_h13', category: 'history', difficulty: 'easy', question: 'Which empire was Julius Caesar a leader of?', options: ['Greek', 'Ottoman', 'Roman', 'Byzantine'], correctIndex: 2 },
+  { id: 'e_h14', category: 'history', difficulty: 'easy', question: 'What country was apartheid practiced in?', options: ['Zimbabwe', 'Kenya', 'Nigeria', 'South Africa'], correctIndex: 3 },
+  { id: 'e_h15', category: 'history', difficulty: 'easy', question: 'Who invented the light bulb?', options: ['Alexander Graham Bell', 'Nikola Tesla', 'Thomas Edison', 'Benjamin Franklin'], correctIndex: 2 },
+  { id: 'e_h16', category: 'history', difficulty: 'easy', question: 'In which country did the Industrial Revolution begin?', options: ['France', 'Germany', 'England', 'United States'], correctIndex: 2 },
+  { id: 'e_h17', category: 'history', difficulty: 'easy', question: 'What was the name of the ancient Egyptian boy pharaoh?', options: ['Ramesses II', 'Cleopatra', 'Tutankhamun', 'Nefertiti'], correctIndex: 2 },
+  { id: 'e_h18', category: 'history', difficulty: 'easy', question: 'Which war was fought between the North and South of the United States?', options: ['The Revolutionary War', 'The Civil War', 'The Mexican-American War', 'The War of 1812'], correctIndex: 1 },
+  { id: 'e_h19', category: 'history', difficulty: 'easy', question: 'What revolution began in France in 1789?', options: ['The French Revolution', 'The Industrial Revolution', 'The American Revolution', 'The Glorious Revolution'], correctIndex: 0 },
+  { id: 'e_h20', category: 'history', difficulty: 'easy', question: 'Who was Nelson Mandela?', options: ['First president of Zimbabwe', 'First democratically elected president of South Africa', 'Leader of the Nigerian independence movement', 'Prime minister of Kenya'], correctIndex: 1 },
+
+  // â”€â”€ HARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // General
+  { id: 'hd_g01', category: 'general', difficulty: 'hard', question: 'What is the capital of Kazakhstan?', options: ['Almaty', 'Bishkek', 'Astana', 'Tashkent'], correctIndex: 2 },
+  { id: 'hd_g02', category: 'general', difficulty: 'hard', question: 'Which country has the most natural lakes in the world?', options: ['Russia', 'United States', 'Finland', 'Canada'], correctIndex: 3 },
+  { id: 'hd_g03', category: 'general', difficulty: 'hard', question: 'Which country consumes the most coffee per capita?', options: ['Italy', 'Sweden', 'Norway', 'Finland'], correctIndex: 3 },
+  { id: 'hd_g04', category: 'general', difficulty: 'hard', question: 'How many time zones does Russia span?', options: ['9', '10', '11', '12'], correctIndex: 2 },
+  { id: 'hd_g05', category: 'general', difficulty: 'hard', question: 'What is the deepest lake in the world?', options: ['Lake Superior', 'Lake Baikal', 'Caspian Sea', 'Lake Tanganyika'], correctIndex: 1 },
+  { id: 'hd_g06', category: 'general', difficulty: 'hard', question: 'What is the smallest country in the world by area?', options: ['Monaco', 'San Marino', 'Vatican City', 'Liechtenstein'], correctIndex: 2 },
+  { id: 'hd_g07', category: 'general', difficulty: 'hard', question: 'How many bones are in the adult human hand?', options: ['19', '23', '27', '31'], correctIndex: 2 },
+  { id: 'hd_g08', category: 'general', difficulty: 'hard', question: 'What country has the most official languages?', options: ['Switzerland', 'India', 'Belgium', 'South Africa'], correctIndex: 3 },
+  { id: 'hd_g09', category: 'general', difficulty: 'hard', question: 'What is the capital of Myanmar?', options: ['Yangon', 'Mandalay', 'Bagan', 'Naypyidaw'], correctIndex: 3 },
+  { id: 'hd_g10', category: 'general', difficulty: 'hard', question: 'In what year did the Chernobyl nuclear disaster occur?', options: ['1983', '1985', '1986', '1989'], correctIndex: 2 },
+  { id: 'hd_g11', category: 'general', difficulty: 'hard', question: 'What is the national animal of Canada?', options: ['Moose', 'Caribou', 'Beaver', 'Bald Eagle'], correctIndex: 2 },
+  { id: 'hd_g12', category: 'general', difficulty: 'hard', question: 'How many grand slam titles did Roger Federer win in his career?', options: ['15', '17', '19', '20'], correctIndex: 3 },
+  { id: 'hd_g13', category: 'general', difficulty: 'hard', question: 'What is the most spoken language in the world by native speakers?', options: ['English', 'Spanish', 'Mandarin Chinese', 'Hindi'], correctIndex: 2 },
+  { id: 'hd_g14', category: 'general', difficulty: 'hard', question: 'Which chess piece can only move diagonally?', options: ['Rook', 'Knight', 'Bishop', 'Pawn'], correctIndex: 2 },
+  { id: 'hd_g15', category: 'general', difficulty: 'hard', question: 'What is the world\'s longest river?', options: ['Amazon', 'Yangtze', 'Nile', 'Mississippi'], correctIndex: 2 },
+  { id: 'hd_g16', category: 'general', difficulty: 'hard', question: 'How many languages are spoken in Papua New Guinea, making it the world\'s most linguistically diverse country?', options: ['About 200', 'About 400', 'About 600', 'Over 800'], correctIndex: 3 },
+  { id: 'hd_g17', category: 'general', difficulty: 'hard', question: 'What is the name of the waterway that connects the Atlantic and Pacific Oceans?', options: ['Suez Canal', 'Panama Canal', 'Strait of Gibraltar', 'Drake Passage'], correctIndex: 1 },
+  { id: 'hd_g18', category: 'general', difficulty: 'hard', question: 'What is the most traded commodity in the world?', options: ['Crude oil', 'Gold', 'Coffee', 'Wheat'], correctIndex: 0 },
+  { id: 'hd_g19', category: 'general', difficulty: 'hard', question: 'Which city hosted the first FIFA World Cup in 1930?', options: ['Buenos Aires', 'São Paulo', 'Rio de Janeiro', 'Montevideo'], correctIndex: 3 },
+  { id: 'hd_g20', category: 'general', difficulty: 'hard', question: 'What is the only US state that can be typed using only the middle row of a QWERTY keyboard?', options: ['Hawaii', 'Alaska', 'Ohio', 'Iowa'], correctIndex: 1 },
+
+  // Science
+  { id: 'hd_s01', category: 'science', difficulty: 'hard', question: 'What is the atomic number of carbon?', options: ['4', '6', '8', '12'], correctIndex: 1 },
+  { id: 'hd_s02', category: 'science', difficulty: 'hard', question: 'What type of bonds hold water molecules to each other?', options: ['Ionic bonds', 'Covalent bonds', 'Hydrogen bonds', 'Van der Waals forces'], correctIndex: 2 },
+  { id: 'hd_s03', category: 'science', difficulty: 'hard', question: 'What is the approximate half-life of Carbon-14?', options: ['1,620 years', '3,800 years', '5,730 years', '12,400 years'], correctIndex: 2 },
+  { id: 'hd_s04', category: 'science', difficulty: 'hard', question: 'Which element has the highest melting point of all metals?', options: ['Iron', 'Platinum', 'Carbon', 'Tungsten'], correctIndex: 3 },
+  { id: 'hd_s05', category: 'science', difficulty: 'hard', question: 'What is the name of the protein that carries oxygen in red blood cells?', options: ['Myosin', 'Hemoglobin', 'Keratin', 'Albumin'], correctIndex: 1 },
+  { id: 'hd_s06', category: 'science', difficulty: 'hard', question: 'How many chromosomes do humans normally have?', options: ['23', '44', '46', '48'], correctIndex: 2 },
+  { id: 'hd_s07', category: 'science', difficulty: 'hard', question: 'Approximately what is the speed of sound in air at 20Â°C?', options: ['220 m/s', '280 m/s', '343 m/s', '420 m/s'], correctIndex: 2 },
+  { id: 'hd_s08', category: 'science', difficulty: 'hard', question: 'Which planet has the most confirmed moons in our solar system?', options: ['Jupiter', 'Uranus', 'Neptune', 'Saturn'], correctIndex: 3 },
+  { id: 'hd_s09', category: 'science', difficulty: 'hard', question: 'What is the most abundant element in the universe?', options: ['Hydrogen', 'Helium', 'Oxygen', 'Carbon'], correctIndex: 0 },
+  { id: 'hd_s10', category: 'science', difficulty: 'hard', question: 'What is the scientific name for the kneecap?', options: ['Tibia', 'Femur', 'Patella', 'Fibula'], correctIndex: 2 },
+  { id: 'hd_s11', category: 'science', difficulty: 'hard', question: 'What type of rock is granite?', options: ['Igneous', 'Sedimentary', 'Metamorphic', 'Foliated'], correctIndex: 0 },
+  { id: 'hd_s12', category: 'science', difficulty: 'hard', question: 'What is the process by which plants lose water vapor through their leaves?', options: ['Osmosis', 'Diffusion', 'Transpiration', 'Evaporation'], correctIndex: 2 },
+  { id: 'hd_s13', category: 'science', difficulty: 'hard', question: 'Which neurotransmitter is most associated with mood regulation and is targeted by antidepressants?', options: ['Dopamine', 'Adrenaline', 'Acetylcholine', 'Serotonin'], correctIndex: 3 },
+  { id: 'hd_s14', category: 'science', difficulty: 'hard', question: 'What is the name of the boundary between Earth\'s crust and mantle?', options: ['Gutenberg discontinuity', 'Lehmann discontinuity', 'MohoroviÄiÄ‡ discontinuity', 'Conrad discontinuity'], correctIndex: 2 },
+  { id: 'hd_s15', category: 'science', difficulty: 'hard', question: 'How many pairs of ribs does the human body have?', options: ['10', '12', '13', '14'], correctIndex: 1 },
+  { id: 'hd_s16', category: 'science', difficulty: 'hard', question: 'What is the pH of pure water?', options: ['6', '6.5', '7', '7.5'], correctIndex: 2 },
+  { id: 'hd_s17', category: 'science', difficulty: 'hard', question: 'Which law states that the pressure and volume of a gas are inversely proportional at constant temperature?', options: ['Charles\'s Law', 'Boyle\'s Law', 'Gay-Lussac\'s Law', 'Avogadro\'s Law'], correctIndex: 1 },
+  { id: 'hd_s18', category: 'science', difficulty: 'hard', question: 'What cell organelle is responsible for protein synthesis?', options: ['Golgi apparatus', 'Lysosome', 'Ribosome', 'Endoplasmic reticulum'], correctIndex: 2 },
+  { id: 'hd_s19', category: 'science', difficulty: 'hard', question: 'What is the minimum energy required to start a chemical reaction called?', options: ['Kinetic energy', 'Potential energy', 'Bond energy', 'Activation energy'], correctIndex: 3 },
+  { id: 'hd_s20', category: 'science', difficulty: 'hard', question: 'What is the name of the membrane that surrounds the nucleus of a cell?', options: ['Cell membrane', 'Endoplasmic reticulum', 'Tonoplast', 'Nuclear envelope'], correctIndex: 3 },
+
+  // History
+  { id: 'hd_h01', category: 'history', difficulty: 'hard', question: 'In what year was the Magna Carta signed?', options: ['1066', '1215', '1265', '1348'], correctIndex: 1 },
+  { id: 'hd_h02', category: 'history', difficulty: 'hard', question: 'What was the name of the first permanent English settlement in America?', options: ['Plymouth', 'Roanoke', 'Jamestown', 'Boston'], correctIndex: 2 },
+  { id: 'hd_h03', category: 'history', difficulty: 'hard', question: 'Who was the last Emperor of China?', options: ['Guangxu', 'Cixi', 'Hongxian', 'Puyi'], correctIndex: 3 },
+  { id: 'hd_h04', category: 'history', difficulty: 'hard', question: 'What year did the Ottoman Empire officially end?', options: ['1918', '1919', '1922', '1924'], correctIndex: 2 },
+  { id: 'hd_h05', category: 'history', difficulty: 'hard', question: 'Which battle ended Napoleon\'s final reign in 1815?', options: ['Battle of Austerlitz', 'Battle of Waterloo', 'Battle of Leipzig', 'Battle of Borodino'], correctIndex: 1 },
+  { id: 'hd_h06', category: 'history', difficulty: 'hard', question: 'Who was the first female Prime Minister of the United Kingdom?', options: ['Theresa May', 'Indira Gandhi', 'Margaret Thatcher', 'Golda Meir'], correctIndex: 2 },
+  { id: 'hd_h07', category: 'history', difficulty: 'hard', question: 'Which ancient civilization built Machu Picchu?', options: ['Aztec', 'Maya', 'Inca', 'Olmec'], correctIndex: 2 },
+  { id: 'hd_h08', category: 'history', difficulty: 'hard', question: 'What was the name of Charles Darwin\'s famous voyage ship?', options: ['HMS Endeavour', 'HMS Victory', 'HMS Discovery', 'HMS Beagle'], correctIndex: 3 },
+  { id: 'hd_h09', category: 'history', difficulty: 'hard', question: 'Who led the Cuban Revolution that ousted Fulgencio Batista?', options: ['Che Guevara', 'Raúl Castro', 'Fidel Castro', 'Camilo Cienfuegos'], correctIndex: 2 },
+  { id: 'hd_h10', category: 'history', difficulty: 'hard', question: 'Which treaty officially ended World War I?', options: ['Treaty of Paris', 'Treaty of Versailles', 'Treaty of Utrecht', 'Treaty of Ghent'], correctIndex: 1 },
+  { id: 'hd_h11', category: 'history', difficulty: 'hard', question: 'What was the Allied code name for the D-Day invasion of Normandy in 1944?', options: ['Operation Barbarossa', 'Operation Overlord', 'Operation Market Garden', 'Operation Neptune'], correctIndex: 1 },
+  { id: 'hd_h12', category: 'history', difficulty: 'hard', question: 'Who was the first ruler of the Mongol Empire?', options: ['Genghis Khan', 'Kublai Khan', 'Ögedei Khan', 'Timur'], correctIndex: 0 },
+  { id: 'hd_h13', category: 'history', difficulty: 'hard', question: 'In what year did India gain independence from Britain?', options: ['1945', '1946', '1947', '1948'], correctIndex: 2 },
+  { id: 'hd_h14', category: 'history', difficulty: 'hard', question: 'Which US President issued the Emancipation Proclamation?', options: ['Ulysses Grant', 'Andrew Johnson', 'James Buchanan', 'Abraham Lincoln'], correctIndex: 3 },
+  { id: 'hd_h15', category: 'history', difficulty: 'hard', question: 'In what year was the United Nations founded?', options: ['1942', '1945', '1948', '1950'], correctIndex: 1 },
+  { id: 'hd_h16', category: 'history', difficulty: 'hard', question: 'Which ancient Greek city-state was most famous for its military culture?', options: ['Athens', 'Corinth', 'Sparta', 'Thebes'], correctIndex: 2 },
+  { id: 'hd_h17', category: 'history', difficulty: 'hard', question: 'What was the name of the first space shuttle to orbit Earth?', options: ['Challenger', 'Discovery', 'Columbia', 'Atlantis'], correctIndex: 2 },
+  { id: 'hd_h18', category: 'history', difficulty: 'hard', question: 'What was the code name for the CIA-backed 1961 invasion of Cuba?', options: ['Operation Mongoose', 'Operation Northwoods', 'Operation Zapata', 'Operation Pluto'], correctIndex: 2 },
+  { id: 'hd_h19', category: 'history', difficulty: 'hard', question: 'Which medieval battle in 1571 halted the Ottoman Empire\'s westward naval expansion?', options: ['Battle of Preveza', 'Battle of Djerba', 'Battle of Actium', 'Battle of Lepanto'], correctIndex: 3 },
+  { id: 'hd_h20', category: 'history', difficulty: 'hard', question: 'What was the name of the Viking settlement in North America established around 1000 AD?', options: ['Markland', 'Helluland', 'Vinland', 'Greenland'], correctIndex: 2 },
+
+  // â”€â”€ IMPOSSIBLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // General
+  { id: 'im_g01', category: 'general', difficulty: 'impossible', question: 'Which country is the only one in the world with a non-rectangular (non-quadrilateral) flag?', options: ['Switzerland', 'Vatican City', 'Nepal', 'Bhutan'], correctIndex: 2 },
+  { id: 'im_g02', category: 'general', difficulty: 'impossible', question: 'What is the world\'s largest desert by area?', options: ['Arabian Desert', 'Sahara Desert', 'Gobi Desert', 'Antarctica'], correctIndex: 3 },
+  { id: 'im_g03', category: 'general', difficulty: 'impossible', question: 'Which country has the longest coastline in the world?', options: ['Russia', 'Norway', 'Australia', 'Canada'], correctIndex: 3 },
+  { id: 'im_g04', category: 'general', difficulty: 'impossible', question: 'How many sovereign states are recognized as UN members?', options: ['185', '191', '193', '197'], correctIndex: 2 },
+  { id: 'im_g05', category: 'general', difficulty: 'impossible', question: 'What is the collective noun for a group of flamingos?', options: ['A colony', 'A flock', 'A stand', 'A flamboyance'], correctIndex: 3 },
+  { id: 'im_g06', category: 'general', difficulty: 'impossible', question: 'What is the dot above the letters "i" and "j" officially called?', options: ['A serif', 'A diacritic', 'A descender', 'A tittle'], correctIndex: 3 },
+  { id: 'im_g07', category: 'general', difficulty: 'impossible', question: 'What is the most stolen food in the world according to global retail surveys?', options: ['Chocolate', 'Cheese', 'Meat', 'Avocados'], correctIndex: 1 },
+  { id: 'im_g08', category: 'general', difficulty: 'impossible', question: 'Who was the original creator of the game that eventually became Monopoly?', options: ['Charles Darrow', 'Parker Brothers', 'George Parker', 'Elizabeth Magie'], correctIndex: 3 },
+  { id: 'im_g09', category: 'general', difficulty: 'impossible', question: 'What percentage of Earth\'s freshwater is locked in glaciers and ice caps?', options: ['About 30%', 'About 45%', 'About 69%', 'About 85%'], correctIndex: 2 },
+  { id: 'im_g10', category: 'general', difficulty: 'impossible', question: 'What is the world\'s oldest known national anthem, dating to the 16th century?', options: ['British God Save the King', 'Wilhelmus of the Netherlands', 'Japanese Kimigayo', 'Danish Kong Christian'], correctIndex: 1 },
+  { id: 'im_g11', category: 'general', difficulty: 'impossible', question: 'What is the name of the phobia of long words?', options: ['Logophobia', 'Verbophobia', 'Hippopotomonstrosesquippedaliophobia', 'Sesquipedalophobia'], correctIndex: 2 },
+  { id: 'im_g12', category: 'general', difficulty: 'impossible', question: 'Lake Titicaca, the world\'s highest navigable lake, sits on the border of which two countries?', options: ['Argentina and Chile', 'Ecuador and Colombia', 'Bolivia and Peru', 'Peru and Brazil'], correctIndex: 2 },
+  { id: 'im_g13', category: 'general', difficulty: 'impossible', question: 'What is the only letter that does not appear in any US state name?', options: ['X', 'Z', 'Q', 'J'], correctIndex: 2 },
+  { id: 'im_g14', category: 'general', difficulty: 'impossible', question: 'Approximately how many teeth (denticles) does a garden snail have?', options: ['About 50', 'About 500', 'About 2,000', 'Over 14,000'], correctIndex: 3 },
+  { id: 'im_g15', category: 'general', difficulty: 'impossible', question: 'What phenomenon describes hot water sometimes freezing faster than cold water?', options: ['The Mpemba effect', 'The Leidenfrost effect', 'The Peltier effect', 'The Bernoulli effect'], correctIndex: 0 },
+  { id: 'im_g16', category: 'general', difficulty: 'impossible', question: 'What is the only country that borders both the Atlantic and Indian Oceans?', options: ['Mozambique', 'Namibia', 'Angola', 'South Africa'], correctIndex: 3 },
+  { id: 'im_g17', category: 'general', difficulty: 'impossible', question: 'Which country has the most UNESCO World Heritage Sites?', options: ['China', 'Spain', 'Italy', 'France'], correctIndex: 2 },
+  { id: 'im_g18', category: 'general', difficulty: 'impossible', question: 'In the NATO phonetic alphabet, what word represents the letter "Y"?', options: ['Yellow', 'Yoke', 'Yorker', 'Yankee'], correctIndex: 3 },
+  { id: 'im_g19', category: 'general', difficulty: 'impossible', question: 'How many Fibonacci numbers are also perfect squares (greater than 1)?', options: ['Zero', 'One (144)', 'Two (25 and 144)', 'Three (4, 25, and 144)'], correctIndex: 1 },
+  { id: 'im_g20', category: 'general', difficulty: 'impossible', question: 'What is the only country in the world whose name in its own language bears no resemblance to its English name?', options: ['Germany (Deutschland)', 'Greece (Hellas)', 'Japan (Nihon)', 'All of the above are examples'], correctIndex: 3 },
+
+  // Science
+  { id: 'im_s01', category: 'science', difficulty: 'impossible', question: 'What is the only non-metal element that is liquid at standard room temperature?', options: ['Mercury', 'Chlorine', 'Bromine', 'Iodine'], correctIndex: 2 },
+  { id: 'im_s02', category: 'science', difficulty: 'impossible', question: 'What is the term for a rapidly rotating neutron star that emits beams of electromagnetic radiation?', options: ['Quasar', 'Magnetar', 'Blazar', 'Pulsar'], correctIndex: 3 },
+  { id: 'im_s03', category: 'science', difficulty: 'impossible', question: 'What does the Chandrasekhar limit define?', options: ['The minimum mass needed to ignite nuclear fusion', 'The maximum mass of a stable white dwarf star', 'The event horizon radius of a stellar-mass black hole', 'The gravitational boundary where light cannot escape'], correctIndex: 1 },
+  { id: 'im_s04', category: 'science', difficulty: 'impossible', question: 'What is the name of the enzyme that unwinds the DNA double helix during replication?', options: ['DNA polymerase', 'DNA ligase', 'Helicase', 'Topoisomerase'], correctIndex: 2 },
+  { id: 'im_s05', category: 'science', difficulty: 'impossible', question: 'Approximately how many neurons are in the human brain?', options: ['About 10 billion', 'About 50 billion', 'About 86 billion', 'About 200 billion'], correctIndex: 2 },
+  { id: 'im_s06', category: 'science', difficulty: 'impossible', question: 'What is the Krebs cycle also known as?', options: ['Glycolysis cycle', 'Citric acid cycle', 'Calvin cycle', 'Electron transport chain'], correctIndex: 1 },
+  { id: 'im_s07', category: 'science', difficulty: 'impossible', question: 'What quantum phenomenon allows two particles to instantaneously affect each other regardless of the distance separating them?', options: ['Quantum entanglement', 'Wave-particle duality', 'Quantum superposition', 'Quantum tunneling'], correctIndex: 0 },
+  { id: 'im_s08', category: 'science', difficulty: 'impossible', question: 'What is the most abundant protein in the human body?', options: ['Hemoglobin', 'Keratin', 'Collagen', 'Albumin'], correctIndex: 2 },
+  { id: 'im_s09', category: 'science', difficulty: 'impossible', question: 'What particle mediates the strong nuclear force that holds quarks together inside protons and neutrons?', options: ['Photon', 'Gluon', 'W boson', 'Graviton'], correctIndex: 1 },
+  { id: 'im_s10', category: 'science', difficulty: 'impossible', question: 'In chemistry, what term describes a molecule that is a non-superimposable mirror image of another molecule?', options: ['Isomer', 'Diastereomer', 'Conformer', 'Enantiomer'], correctIndex: 3 },
+  { id: 'im_s11', category: 'science', difficulty: 'impossible', question: 'What is the approximate temperature at the core of the Sun?', options: ['1 millionÂ°C', '5 millionÂ°C', '15 millionÂ°C', '100 millionÂ°C'], correctIndex: 2 },
+  { id: 'im_s12', category: 'science', difficulty: 'impossible', question: 'What is the light-emitting chemical substrate in bioluminescent organisms called?', options: ['Fluorescein', 'Phosphorin', 'Luciferin', 'Lumiferin'], correctIndex: 2 },
+  { id: 'im_s13', category: 'science', difficulty: 'impossible', question: 'Which neurotransmitter is primarily responsible for long-term potentiation, the cellular basis of memory formation?', options: ['GABA', 'Dopamine', 'Acetylcholine', 'Glutamate'], correctIndex: 3 },
+  { id: 'im_s14', category: 'science', difficulty: 'impossible', question: 'What mathematical paradox demonstrates that a hotel with infinite rooms can always accommodate more guests?', options: ['Russell\'s Paradox', 'Cantor\'s Diagonal Argument', 'Hilbert\'s Hotel', 'Zeno\'s Paradox'], correctIndex: 2 },
+  { id: 'im_s15', category: 'science', difficulty: 'impossible', question: 'What protein complex acts as the cell\'s "recycling system," breaking down damaged or unneeded proteins?', options: ['Lysosome', 'Peroxisome', 'Vacuole', 'Proteasome'], correctIndex: 3 },
+  { id: 'im_s16', category: 'science', difficulty: 'impossible', question: 'What does the Schwarzschild radius describe?', options: ['The maximum orbital distance of a star around a black hole', 'The size to which mass must be compressed to become a black hole', 'The minimum size of a neutron star', 'The event horizon of a rotating black hole'], correctIndex: 1 },
+  { id: 'im_s17', category: 'science', difficulty: 'impossible', question: 'Which element, long thought to be stable, was discovered in 2003 to be the heaviest naturally occurring radioactive element?', options: ['Tellurium', 'Antimony', 'Bismuth', 'Indium'], correctIndex: 2 },
+  { id: 'im_s18', category: 'science', difficulty: 'impossible', question: 'In eukaryotic cells, what consensus sequence near the start codon helps ribosomes initiate protein translation?', options: ['Shine-Dalgarno sequence', 'TATA box', 'CpG island', 'Kozak sequence'], correctIndex: 3 },
+  { id: 'im_s19', category: 'science', difficulty: 'impossible', question: 'What is the approximate diameter of a human red blood cell?', options: ['2 micrometers', '8 micrometers', '25 micrometers', '100 micrometers'], correctIndex: 1 },
+  { id: 'im_s20', category: 'science', difficulty: 'impossible', question: 'In quantum field theory, what is the field whose excitation produces the Higgs boson?', options: ['Higgs field', 'Brout-Englert field', 'Fermion field', 'Gauge field'], correctIndex: 0 },
+
+  // History
+  { id: 'im_h01', category: 'history', difficulty: 'impossible', question: 'Who was the only US president to serve two non-consecutive terms?', options: ['Martin Van Buren', 'John Tyler', 'Grover Cleveland', 'John Adams'], correctIndex: 2 },
+  { id: 'im_h02', category: 'history', difficulty: 'impossible', question: 'What edict issued in 313 AD granted religious tolerance throughout the Roman Empire?', options: ['Edict of Thessalonica', 'Edict of Fontainebleau', 'Edict of Milan', 'Edict of Nantes'], correctIndex: 2 },
+  { id: 'im_h03', category: 'history', difficulty: 'impossible', question: 'Who was the Aztec emperor when Hernán Cortés conquered Mexico?', options: ['Cuauhtémoc', 'Cuitláhuac', 'Moctezuma II', 'Ahuitzotl'], correctIndex: 2 },
+  { id: 'im_h04', category: 'history', difficulty: 'impossible', question: 'Who was the first African American to seek a major US political party\'s presidential nomination?', options: ['Shirley Chisholm', 'Jesse Jackson', 'Barack Obama', 'Al Sharpton'], correctIndex: 0 },
+  { id: 'im_h05', category: 'history', difficulty: 'impossible', question: 'Which treaty ended the Thirty Years\' War and is considered the foundation of the modern nation-state system?', options: ['Treaty of Vienna', 'Peace of Westphalia', 'Treaty of Utrecht', 'Congress of Berlin'], correctIndex: 1 },
+  { id: 'im_h06', category: 'history', difficulty: 'impossible', question: 'Which Byzantine emperor oversaw the compilation of Roman law known as the Corpus Juris Civilis?', options: ['Heraclius', 'Theodosius II', 'Justinian I', 'Basil II'], correctIndex: 2 },
+  { id: 'im_h07', category: 'history', difficulty: 'impossible', question: 'Which was the world\'s first nuclear power plant to deliver electricity to a civilian grid, in 1954?', options: ['Calder Hall', 'Shippingport', 'EBR-I', 'Obninsk Nuclear Power Plant'], correctIndex: 3 },
+  { id: 'im_h08', category: 'history', difficulty: 'impossible', question: 'What was the CIA\'s official operation code name for the 1961 Bay of Pigs invasion of Cuba?', options: ['Operation Mongoose', 'Operation Northwoods', 'Operation Zapata', 'Operation Pluto'], correctIndex: 2 },
+  { id: 'im_h09', category: 'history', difficulty: 'impossible', question: 'Which battle in 1571 ended the Ottoman Empire\'s naval dominance of the Mediterranean?', options: ['Battle of Preveza', 'Battle of Djerba', 'Battle of Actium', 'Battle of Lepanto'], correctIndex: 3 },
+  { id: 'im_h10', category: 'history', difficulty: 'impossible', question: 'In what year did Marie Curie win her second Nobel Prize, becoming the first person to win two Nobel Prizes?', options: ['1903', '1907', '1911', '1914'], correctIndex: 2 },
+  { id: 'im_h11', category: 'history', difficulty: 'impossible', question: 'What was the name of the first widely used high-level programming language, released in 1957?', options: ['COBOL', 'LISP', 'FORTRAN', 'BASIC'], correctIndex: 2 },
+  { id: 'im_h12', category: 'history', difficulty: 'impossible', question: 'Which civilization first formalized the concept of zero as a number (approximately 628 AD)?', options: ['Babylonians', 'Mayans', 'Arabs', 'Ancient Indians'], correctIndex: 3 },
+  { id: 'im_h13', category: 'history', difficulty: 'impossible', question: 'What was the name of the ancient Egyptian goddess specifically associated with writing, measurement, and record-keeping?', options: ['Isis', 'Hathor', 'Thoth', 'Seshat'], correctIndex: 3 },
+  { id: 'im_h14', category: 'history', difficulty: 'impossible', question: 'Who was the last Byzantine emperor when Constantinople fell to the Ottomans in 1453?', options: ['John VIII Palaiologos', 'Manuel II Palaiologos', 'Mehmed II', 'Constantine XI Palaiologos'], correctIndex: 3 },
+  { id: 'im_h15', category: 'history', difficulty: 'impossible', question: 'What was the last land battle of the American Civil War, fought weeks after Lee\'s surrender?', options: ['Battle of Appomattox', 'Battle of Bentonville', 'Battle of Palmito Ranch', 'Battle of Columbus'], correctIndex: 2 },
+  { id: 'im_h16', category: 'history', difficulty: 'impossible', question: 'What is the oldest known written legal code, predating Hammurabi\'s code by over three centuries?', options: ['Code of Hammurabi', 'Laws of Eshnunna', 'Edict of Urukagina', 'Code of Ur-Nammu'], correctIndex: 3 },
+  { id: 'im_h17', category: 'history', difficulty: 'impossible', question: 'What treaty established the principle of religious tolerance after the Thirty Years\' War, creating the concept of state sovereignty?', options: ['Peace of Augsburg', 'Peace of Westphalia', 'Peace of Lübeck', 'Peace of Prague'], correctIndex: 1 },
+  { id: 'im_h18', category: 'history', difficulty: 'impossible', question: 'Which country was the first to grant women the right to vote at a national level?', options: ['Australia', 'New Zealand', 'Finland', 'Norway'], correctIndex: 1 },
+  { id: 'im_h19', category: 'history', difficulty: 'impossible', question: 'Which ancient Greek scholar first accurately estimated the circumference of the Earth using shadows and geometry?', options: ['Pythagoras', 'Archimedes', 'Aristotle', 'Eratosthenes'], correctIndex: 3 },
+  { id: 'im_h20', category: 'history', difficulty: 'impossible', question: 'In what year was the International Space Station\'s first permanent crew launched to begin continuous human occupation?', options: ['1998', '1999', '2000', '2001'], correctIndex: 2 },
 ];

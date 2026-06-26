@@ -10,7 +10,7 @@ import { colors, fonts, spacing } from '../theme/theme';
  * hands it the chosen settings plus an onExit callback back to Home.
  */
 export function GamePlayScreen({ navigation, route }: GamePlayScreenProps) {
-  const { gameId, roundLength, totalRounds } = route.params;
+  const { gameId, roundLength, totalRounds, revealChoices } = route.params;
   const Engine = getGameEngine(gameId);
 
   const exitToHome = () => navigation.popToTop();
@@ -24,7 +24,7 @@ export function GamePlayScreen({ navigation, route }: GamePlayScreenProps) {
     );
   }
 
-  return <Engine roundLength={roundLength} totalRounds={totalRounds} onExit={exitToHome} />;
+  return <Engine roundLength={roundLength} totalRounds={totalRounds} revealChoices={revealChoices} onExit={exitToHome} />;
 }
 
 const styles = StyleSheet.create({

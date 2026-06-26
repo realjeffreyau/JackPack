@@ -1,9 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import type { GameEngineProps } from '../../types/game';
-import { MOLE_QUESTIONS, type MoleCategory, type MoleQuestion } from '../../data/theMole';
+import { MOLE_QUESTIONS, type MoleCategory, type MoleDifficulty, type MoleQuestion } from '../../data/theMole';
 import { shuffle } from '../../utils/deck';
 import { PlayerSetup } from './components/PlayerSetup';
+import { DifficultySelect } from './components/DifficultySelect';
 import { CategorySelect } from './components/CategorySelect';
 import { PrivacyGate } from './components/PrivacyGate';
 import { RoleReveal } from './components/RoleReveal';
@@ -11,11 +12,11 @@ import { TriviaQuestion } from './components/TriviaQuestion';
 import { TriviaAnswer } from './components/TriviaAnswer';
 import { RoundRecap } from './components/RoundRecap';
 import { VoteCast } from './components/VoteCast';
-import { TieBreaker } from './components/TieBreaker';
 import { GameOver } from './components/GameOver';
 
 type Phase =
   | 'player_setup'
+  | 'difficulty_select'
   | 'category_select'
   | 'role_reveal_gate'
   | 'role_reveal'
@@ -25,9 +26,6 @@ type Phase =
   | 'round_recap'
   | 'vote_gate'
   | 'vote_cast'
-  | 'tie_breaker'
-  | 'tie_vote_gate'
-  | 'tie_vote_cast'
   | 'game_over';
 
 interface MolePlayer {
@@ -38,12 +36,47 @@ interface MolePlayer {
   votesReceived: number;
 }
 
-const POINTS_PER_ANSWER = 100;
+const DIFFICULTY_POINTS: Record<MoleDifficulty, { groupPoints: number; molePoints: number }> = {
+  easy:       { groupPoints: 75,  molePoints: 150 },
+  medium:     { groupPoints: 100, molePoints: 100 },
+  hard:       { groupPoints: 150, molePoints: 75  },
+  impossible: { groupPoints: 200, molePoints: 50  },
+};
 
-export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEngineProps) {
+// ── Balance knobs ────────────────────────────────────────────────────────────
+// Auto-win pots are scaled per side from rounds × difficulty × player count.
+const GROUP_FACTOR = 0.70; // group must hit ~70% of perfect play to auto-win
+const MOLE_FACTOR = 0.70;  // mole must hit ~70% of a strong sabotage run
+// Voting bonuses (all-or-nothing) added to the totals after the final vote.
+const CATCH_FACTOR = 1.0;   // group reward when the mole is caught by majority
+const EVASION_FACTOR = 0.5; // mole reward (× rounds) when it dodges a majority vote
+
+const round50 = (n: number) => Math.round(n / 50) * 50;
+
+function difficultyAverages(diffs: MoleDifficulty[]) {
+  const list = diffs.length > 0 ? diffs : (['medium'] as MoleDifficulty[]);
+  const avgGroup = list.reduce((s, d) => s + DIFFICULTY_POINTS[d].groupPoints, 0) / list.length;
+  const avgMole = list.reduce((s, d) => s + DIFFICULTY_POINTS[d].molePoints, 0) / list.length;
+  return { avgGroup, avgMole };
+}
+
+function computeThresholds(playerCount: number, rounds: number, diffs: MoleDifficulty[]) {
+  const { avgGroup, avgMole } = difficultyAverages(diffs);
+  // Group ceiling = every regular correct ((N-1), the mole sabotages).
+  // Mole ceiling = everyone wrong (N). Each side needs ~70% of its own max,
+  // which keeps the mole from auto-winning by simply answering wrong alone.
+  const regulars = Math.max(1, playerCount - 1);
+  return {
+    groupThreshold: round50(regulars * avgGroup * rounds * GROUP_FACTOR),
+    moleThreshold: round50(playerCount * avgMole * rounds * MOLE_FACTOR),
+  };
+}
+
+export function TheMoleEngine({ roundLength, totalRounds, revealChoices = false, onExit }: GameEngineProps) {
   const [phase, setPhase] = useState<Phase>('player_setup');
   const [players, setPlayers] = useState<MolePlayer[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<MoleCategory[]>([]);
+  const [selectedDifficulties, setSelectedDifficulties] = useState<MoleDifficulty[]>(['medium']);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [currentRound, setCurrentRound] = useState(1);
   const [currentQuestion, setCurrentQuestion] = useState<MoleQuestion | null>(null);
@@ -52,18 +85,28 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
   const [roundAnswers, setRoundAnswers] = useState<Record<string, 0 | 1 | 2 | 3>>({});
   const [lastRoundCorrect, setLastRoundCorrect] = useState(0);
   const [lastRoundIncorrect, setLastRoundIncorrect] = useState(0);
-  const [tiePlayerIds, setTiePlayerIds] = useState<string[]>([]);
-  const [tieBreakerRound, setTieBreakerRound] = useState(0);
+  const [groupThreshold, setGroupThreshold] = useState(0);
+  const [moleThreshold, setMoleThreshold] = useState(0);
+  const [moleCaught, setMoleCaught] = useState(false);
+  const [voteBonus, setVoteBonus] = useState(0);
   const [winner, setWinner] = useState<'group' | 'mole' | 'tie' | null>(null);
+  const [isAutoWin, setIsAutoWin] = useState(false);
   const [prevNames, setPrevNames] = useState<string[]>([]);
 
   const questionDeckRef = useRef<MoleQuestion[]>([]);
   const categoriesRef = useRef<MoleCategory[]>([]);
+  const difficultiesRef = useRef<MoleDifficulty[]>(['medium']);
+
+  function buildDeck(cats: MoleCategory[], diffs: MoleDifficulty[]): MoleQuestion[] {
+    const filtered = MOLE_QUESTIONS.filter(
+      (q) => cats.includes(q.category) && diffs.includes(q.difficulty),
+    );
+    return shuffle(filtered.length > 0 ? filtered : MOLE_QUESTIONS);
+  }
 
   function drawNextQuestion(): MoleQuestion {
     if (questionDeckRef.current.length === 0) {
-      const filtered = MOLE_QUESTIONS.filter((q) => categoriesRef.current.includes(q.category));
-      questionDeckRef.current = shuffle(filtered.length > 0 ? filtered : MOLE_QUESTIONS);
+      questionDeckRef.current = buildDeck(categoriesRef.current, difficultiesRef.current);
     }
     return questionDeckRef.current.pop()!;
   }
@@ -81,17 +124,29 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
       votesReceived: 0,
     }));
     setPlayers(newPlayers);
+    setPhase('difficulty_select');
+  }, []);
+
+  const handleDifficultiesDone = useCallback((diffs: MoleDifficulty[]) => {
+    setSelectedDifficulties(diffs);
+    difficultiesRef.current = diffs;
     setPhase('category_select');
   }, []);
 
   const handleCategoriesDone = useCallback((cats: MoleCategory[]) => {
     setSelectedCategories(cats);
     categoriesRef.current = cats;
-    const filtered = MOLE_QUESTIONS.filter((q) => cats.includes(q.category));
-    questionDeckRef.current = shuffle(filtered.length > 0 ? filtered : MOLE_QUESTIONS);
+    questionDeckRef.current = buildDeck(cats, difficultiesRef.current);
+    const { groupThreshold: gT, moleThreshold: mT } = computeThresholds(
+      players.length,
+      totalRounds,
+      difficultiesRef.current,
+    );
+    setGroupThreshold(gT);
+    setMoleThreshold(mT);
     setCurrentPlayerIndex(0);
     setPhase('role_reveal_gate');
-  }, []);
+  }, [players.length, totalRounds]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Role reveal loop ───────────────────────────────────────────────────────
 
@@ -104,7 +159,6 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
       setCurrentPlayerIndex(playerIdx + 1);
       setPhase('role_reveal_gate');
     } else {
-      // All roles seen — start first trivia round
       const q = drawNextQuestion();
       setCurrentQuestion(q);
       setRoundAnswers({});
@@ -137,7 +191,8 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
         setCurrentPlayerIndex(playerIdx + 1);
         setPhase('trivia_answer_gate');
       } else {
-        // Tally round
+        // Tally round using difficulty-scaled points
+        const { groupPoints, molePoints } = DIFFICULTY_POINTS[question.difficulty];
         let correct = 0;
         let incorrect = 0;
         allPlayers.forEach((p) => {
@@ -147,8 +202,8 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
             incorrect++;
           }
         });
-        const newGroupPot = gPot + correct * POINTS_PER_ANSWER;
-        const newMolePot = mPot + incorrect * POINTS_PER_ANSWER;
+        const newGroupPot = gPot + correct * groupPoints;
+        const newMolePot = mPot + incorrect * molePoints;
         setGroupPot(newGroupPot);
         setMolePot(newMolePot);
         setLastRoundCorrect(correct);
@@ -161,7 +216,20 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
 
   // ── Round recap → next round or voting ────────────────────────────────────
 
-  const handleRecapNext = useCallback((round: number) => {
+  const handleRecapNext = useCallback((round: number, gPot: number, mPot: number) => {
+    // Auto-win check: if either pot crosses its own threshold, skip voting
+    if (groupThreshold > 0 && gPot >= groupThreshold) {
+      setWinner('group');
+      setIsAutoWin(true);
+      setPhase('game_over');
+      return;
+    }
+    if (moleThreshold > 0 && mPot >= moleThreshold) {
+      setWinner('mole');
+      setIsAutoWin(true);
+      setPhase('game_over');
+      return;
+    }
     if (round >= totalRounds) {
       setCurrentPlayerIndex(0);
       setPhase('vote_gate');
@@ -173,7 +241,7 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
       setCurrentRound(round + 1);
       setPhase('trivia_question');
     }
-  }, [totalRounds]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [totalRounds, groupThreshold, moleThreshold]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Voting loop ────────────────────────────────────────────────────────────
 
@@ -181,30 +249,39 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
     setPhase('vote_cast');
   }, []);
 
-  const handleTieVoteGateReveal = useCallback(() => {
-    setPhase('tie_vote_cast');
-  }, []);
+  // Voting now awards points instead of deciding the winner outright. The mole
+  // keeps an evasion bonus unless it is caught by a majority of votes.
+  const tallyVotes = useCallback((currentPlayers: MolePlayer[], gPot: number, mPot: number) => {
+    const n = currentPlayers.length;
+    const mole = currentPlayers.find((p) => p.isMole);
+    const { avgGroup, avgMole } = difficultyAverages(difficultiesRef.current);
+    const regulars = Math.max(1, n - 1);
+    const caughtBonus = round50(regulars * avgGroup * CATCH_FACTOR);
+    const evasionBonus = round50(regulars * avgMole * totalRounds * EVASION_FACTOR);
 
-  function tallyVotes(currentPlayers: MolePlayer[], isTieRound: number) {
-    const maxVotes = Math.max(...currentPlayers.map((p) => p.votesReceived));
-    const topVoters = currentPlayers.filter((p) => p.votesReceived === maxVotes);
+    const moleVotes = mole?.votesReceived ?? 0;
+    const majority = moleVotes > n / 2;
 
-    if (topVoters.length === 1) {
-      const topPlayer = topVoters[0];
-      setWinner(topPlayer.isMole ? 'group' : 'mole');
-      setPhase('game_over');
-    } else if (isTieRound >= 1) {
-      setWinner('tie');
-      setPhase('game_over');
+    let finalGroup = gPot;
+    let finalMole = mPot;
+    if (majority) {
+      finalGroup += caughtBonus;
+      setGroupPot(finalGroup);
+      setVoteBonus(caughtBonus);
     } else {
-      setTiePlayerIds(topVoters.map((p) => p.id));
-      setTieBreakerRound(1);
-      setPhase('tie_breaker');
+      finalMole += evasionBonus;
+      setMolePot(finalMole);
+      setVoteBonus(evasionBonus);
     }
-  }
+    setMoleCaught(majority);
+
+    setWinner(finalGroup > finalMole ? 'group' : finalMole > finalGroup ? 'mole' : 'tie');
+    setIsAutoWin(false);
+    setPhase('game_over');
+  }, [totalRounds]);
 
   const handleVoteCast = useCallback(
-    (targetId: string, playerIdx: number, allPlayers: MolePlayer[], currentTieBreakerRound: number) => {
+    (targetId: string, playerIdx: number, allPlayers: MolePlayer[], gPot: number, mPot: number) => {
       const voter = allPlayers[playerIdx];
       const updatedPlayers = allPlayers.map((p) => {
         if (p.id === voter.id) return { ...p, votedFor: targetId };
@@ -217,44 +294,11 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
         setCurrentPlayerIndex(playerIdx + 1);
         setPhase('vote_gate');
       } else {
-        tallyVotes(updatedPlayers, currentTieBreakerRound);
+        tallyVotes(updatedPlayers, gPot, mPot);
       }
     },
-    [], // eslint-disable-line react-hooks/exhaustive-deps
+    [tallyVotes],
   );
-
-  const handleTieVoteCast = useCallback(
-    (targetId: string, playerIdx: number, allPlayers: MolePlayer[], currentTieBreakerRound: number) => {
-      const voter = allPlayers[playerIdx];
-      const updatedPlayers = allPlayers.map((p) => {
-        if (p.id === voter.id) return { ...p, votedFor: targetId };
-        if (p.id === targetId) return { ...p, votesReceived: p.votesReceived + 1 };
-        return p;
-      });
-      setPlayers(updatedPlayers);
-
-      if (playerIdx < allPlayers.length - 1) {
-        setCurrentPlayerIndex(playerIdx + 1);
-        setPhase('tie_vote_gate');
-      } else {
-        tallyVotes(updatedPlayers, currentTieBreakerRound);
-      }
-    },
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
-
-  // ── Tie breaker ────────────────────────────────────────────────────────────
-
-  const handleStartRevote = useCallback((allPlayers: MolePlayer[]) => {
-    const resetPlayers = allPlayers.map((p) => ({
-      ...p,
-      votesReceived: 0,
-      votedFor: null,
-    }));
-    setPlayers(resetPlayers);
-    setCurrentPlayerIndex(0);
-    setPhase('tie_vote_gate');
-  }, []);
 
   // ── Game over ──────────────────────────────────────────────────────────────
 
@@ -262,6 +306,7 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
     setPhase('player_setup');
     setPlayers([]);
     setSelectedCategories([]);
+    setSelectedDifficulties(['medium']);
     // prevNames intentionally kept — passed to PlayerSetup to pre-fill
     setCurrentPlayerIndex(0);
     setCurrentRound(1);
@@ -271,11 +316,15 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
     setRoundAnswers({});
     setLastRoundCorrect(0);
     setLastRoundIncorrect(0);
-    setTiePlayerIds([]);
-    setTieBreakerRound(0);
+    setGroupThreshold(0);
+    setMoleThreshold(0);
+    setMoleCaught(false);
+    setVoteBonus(0);
     setWinner(null);
+    setIsAutoWin(false);
     questionDeckRef.current = [];
     categoriesRef.current = [];
+    difficultiesRef.current = ['medium'];
   }, []);
 
   // ── Quit ───────────────────────────────────────────────────────────────────
@@ -291,6 +340,10 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
 
   if (phase === 'player_setup') {
     return <PlayerSetup onDone={handlePlayersDone} onExit={onExit} initialNames={prevNames} />;
+  }
+
+  if (phase === 'difficulty_select') {
+    return <DifficultySelect onDone={handleDifficultiesDone} />;
   }
 
   if (phase === 'category_select') {
@@ -327,6 +380,7 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
         question={currentQuestion}
         currentRound={currentRound}
         totalRounds={totalRounds}
+        revealChoices={revealChoices}
         onStartAnswering={handleStartAnswering}
       />
     );
@@ -367,8 +421,10 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
         incorrectCount={lastRoundIncorrect}
         groupPot={groupPot}
         molePot={molePot}
+        groupThreshold={groupThreshold}
+        moleThreshold={moleThreshold}
         isLastRound={currentRound >= totalRounds}
-        onNext={() => handleRecapNext(currentRound)}
+        onNext={() => handleRecapNext(currentRound, groupPot, molePot)}
       />
     );
   }
@@ -393,47 +449,7 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
         candidates={candidates.map((p) => ({ id: p.id, name: p.name }))}
         voterIndex={currentPlayerIndex}
         totalVoters={players.length}
-        onCast={(targetId) => handleVoteCast(targetId, currentPlayerIndex, players, tieBreakerRound)}
-      />
-    );
-  }
-
-  if (phase === 'tie_breaker') {
-    const tiedPlayers = players.filter((p) => tiePlayerIds.includes(p.id));
-    return (
-      <TieBreaker
-        tiedPlayers={tiedPlayers.map((p) => ({ id: p.id, name: p.name }))}
-        argumentDuration={roundLength}
-        onStartRevote={() => handleStartRevote(players)}
-      />
-    );
-  }
-
-  if (phase === 'tie_vote_gate') {
-    const player = players[currentPlayerIndex];
-    return (
-      <PrivacyGate
-        playerName={player.name}
-        context="Tie-breaker vote. Cast your secret vote."
-        onReveal={handleTieVoteGateReveal}
-      />
-    );
-  }
-
-  if (phase === 'tie_vote_cast') {
-    const voter = players[currentPlayerIndex];
-    const candidates = players.filter(
-      (p) => p.id !== voter.id && tiePlayerIds.includes(p.id),
-    );
-    return (
-      <VoteCast
-        voter={{ id: voter.id, name: voter.name }}
-        candidates={candidates.map((p) => ({ id: p.id, name: p.name }))}
-        voterIndex={currentPlayerIndex}
-        totalVoters={players.length}
-        onCast={(targetId) =>
-          handleTieVoteCast(targetId, currentPlayerIndex, players, tieBreakerRound)
-        }
+        onCast={(targetId) => handleVoteCast(targetId, currentPlayerIndex, players, groupPot, molePot)}
       />
     );
   }
@@ -445,6 +461,9 @@ export function TheMoleEngine({ roundLength, totalRounds, onExit }: GameEnginePr
         groupPot={groupPot}
         molePot={molePot}
         winner={winner}
+        isAutoWin={isAutoWin}
+        moleCaught={moleCaught}
+        voteBonus={voteBonus}
         onPlayAgain={handlePlayAgain}
         onExit={onExit}
       />

@@ -80,7 +80,7 @@ export const GAMES: readonly Game[] = [
     name: 'The Mole',
     tagline: 'One of you is lying.',
     description:
-      'Work together to answer trivia — but one player is secretly sabotaging every round. Earn points as a group, or let the Mole drain them away. Vote to unmask the traitor at the end.',
+      'Work together to answer trivia — but one player is secretly sabotaging every round. Build the bigger pot to win. Whoever has the most points at the end takes it all.',
     instructions: [
       'Enter all player names and pick your trivia categories.',
       'Each player secretly receives their role — Mole or Regular Player.',
@@ -88,8 +88,9 @@ export const GAMES: readonly Game[] = [
       'Pass the phone privately to each player to lock in their answer.',
       'Regular Players answer correctly to grow the Group Pot.',
       'The Mole answers wrong on purpose to fill their own Mole Pot.',
-      'After all rounds, vote together to unmask the Mole.',
-      'Catch the Mole and the group wins. Let them escape and the Mole takes everything.',
+      'Fill your pot to the auto-win target and you win instantly.',
+      'After all rounds, vote on the Mole: catch them by majority for a Group bonus, or they pocket an evasion bonus.',
+      'Highest pot when the dust settles wins.',
     ],
     icon: '🕵️',
     accent: colors.purple,
@@ -104,6 +105,7 @@ export const GAMES: readonly Game[] = [
       minRoundLength: 60,
       maxRoundLength: 120,
       roundLengthStep: 30,
+      defaultRevealChoices: false,
     },
   },
 ];
