@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   },
   topRow: {
     marginBottom: spacing.md,
+    paddingLeft: 48,
   },
   playerPill: {
     backgroundColor: colors.surface,

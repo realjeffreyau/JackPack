@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import type { GamePlayScreenProps } from '../navigation/types';
 import { getGameEngine } from '../games/registry';
 import { PrimaryButton } from '../components/PrimaryButton';
+import { HomeButton } from '../components/HomeButton';
 import { colors, fonts, spacing } from '../theme/theme';
 
 /**
@@ -24,10 +25,18 @@ export function GamePlayScreen({ navigation, route }: GamePlayScreenProps) {
     );
   }
 
-  return <Engine roundLength={roundLength} totalRounds={totalRounds} revealChoices={revealChoices} onExit={exitToHome} />;
+  return (
+    <View style={styles.host}>
+      <Engine roundLength={roundLength} totalRounds={totalRounds} revealChoices={revealChoices} onExit={exitToHome} />
+      <HomeButton onExit={exitToHome} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  host: {
+    flex: 1,
+  },
   fallback: {
     flex: 1,
     backgroundColor: colors.bg,

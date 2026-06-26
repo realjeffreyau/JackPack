@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   },
   topRow: {
     marginBottom: spacing.lg,
+    paddingLeft: 48,
   },
   voterPill: {
     backgroundColor: colors.surface,

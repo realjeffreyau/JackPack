@@ -13,21 +13,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { colors, fonts, radius, spacing } from '../../../theme/theme';
+import { MAX_TEAMS, MIN_TEAMS, makeTeamId, type Team } from '../types';
 
-interface PlayerSetupProps {
-  onDone: (names: string[]) => void;
-  onExit: () => void;
-  initialNames?: string[];
+interface Props {
+  accent: string;
+  onDone: (teams: Team[]) => void;
+  onBack: () => void;
 }
 
-const MIN_PLAYERS = 3;
-const MAX_PLAYERS = 10;
-
-export function PlayerSetup({ onDone, onExit, initialNames }: PlayerSetupProps) {
+export function TeamSetup({ accent, onDone, onBack }: Props) {
   const insets = useSafeAreaInsets();
-  const [names, setNames] = useState<string[]>(
-    initialNames && initialNames.length >= MIN_PLAYERS ? initialNames : ['', '', ''],
-  );
+  const [names, setNames] = useState<string[]>(['Team 1', 'Team 2']);
 
   function updateName(index: number, value: string) {
     setNames((prev) => {
@@ -37,46 +33,41 @@ export function PlayerSetup({ onDone, onExit, initialNames }: PlayerSetupProps) 
     });
   }
 
-  function addPlayer() {
-    if (names.length < MAX_PLAYERS) {
-      setNames((prev) => [...prev, '']);
-    }
+  function addTeam() {
+    if (names.length < MAX_TEAMS) setNames((prev) => [...prev, `Team ${prev.length + 1}`]);
   }
 
-  function removePlayer(index: number) {
-    if (names.length > MIN_PLAYERS) {
-      setNames((prev) => prev.filter((_, i) => i !== index));
-    }
+  function removeTeam(index: number) {
+    if (names.length > MIN_TEAMS) setNames((prev) => prev.filter((_, i) => i !== index));
   }
 
   const filled = names.map((n) => n.trim()).filter(Boolean);
-  const canProceed = filled.length >= MIN_PLAYERS && filled.length === names.length;
+  const canStart = filled.length >= MIN_TEAMS && filled.length === names.length;
+  const hasBlank = names.some((n) => !n.trim());
+
+  function start() {
+    const teams: Team[] = names.map((n) => ({ id: makeTeamId(), name: n.trim(), points: 0 }));
+    onDone(teams);
+  }
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <View
-        style={[
-          styles.root,
-          { paddingTop: insets.top + spacing.md, paddingBottom: insets.bottom + spacing.lg },
-        ]}
-      >
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <View style={[styles.root, { paddingTop: insets.top + spacing.md, paddingBottom: insets.bottom + spacing.lg }]}>
         <View style={styles.topBar}>
-          <Text style={styles.title}>Who's Playing?</Text>
           <Pressable
-            onPress={onExit}
+            onPress={onBack}
             hitSlop={10}
             accessibilityRole="button"
-            accessibilityLabel="Exit game"
-            style={({ pressed }) => [styles.closeBtn, { opacity: pressed ? 0.6 : 1 }]}
+            accessibilityLabel="Back"
+            style={({ pressed }) => [styles.backBtn, { opacity: pressed ? 0.6 : 1 }]}
           >
-            <Ionicons name="close" size={24} color={colors.textMuted} />
+            <Ionicons name="chevron-back" size={22} color={colors.text} />
+            <Text style={styles.backText}>Back</Text>
           </Pressable>
         </View>
 
-        <Text style={styles.sub}>Enter each player's name before starting.</Text>
+        <Text style={styles.title}>Teams</Text>
+        <Text style={styles.sub}>At least {MIN_TEAMS} teams, up to {MAX_TEAMS}. Most explosion points loses.</Text>
 
         <ScrollView
           style={styles.scroll}
@@ -86,26 +77,26 @@ export function PlayerSetup({ onDone, onExit, initialNames }: PlayerSetupProps) 
         >
           {names.map((name, i) => (
             <View key={i} style={styles.row}>
-              <View style={styles.indexPill}>
-                <Text style={styles.indexText}>{i + 1}</Text>
+              <View style={[styles.indexPill, { backgroundColor: accent + '22' }]}>
+                <Text style={[styles.indexText, { color: accent }]}>{i + 1}</Text>
               </View>
               <TextInput
                 style={styles.input}
                 value={name}
                 onChangeText={(v) => updateName(i, v)}
-                placeholder={`Player ${i + 1}`}
+                placeholder={`Team ${i + 1}`}
                 placeholderTextColor={colors.textFaint}
-                maxLength={20}
+                maxLength={18}
                 autoCapitalize="words"
                 returnKeyType="next"
-                accessibilityLabel={`Player ${i + 1} name`}
+                accessibilityLabel={`Team ${i + 1} name`}
               />
-              {names.length > MIN_PLAYERS && (
+              {names.length > MIN_TEAMS && (
                 <Pressable
-                  onPress={() => removePlayer(i)}
+                  onPress={() => removeTeam(i)}
                   hitSlop={8}
                   accessibilityRole="button"
-                  accessibilityLabel={`Remove player ${i + 1}`}
+                  accessibilityLabel={`Remove team ${i + 1}`}
                   style={({ pressed }) => [styles.removeBtn, { opacity: pressed ? 0.5 : 1 }]}
                 >
                   <Ionicons name="close-circle" size={22} color={colors.textFaint} />
@@ -114,29 +105,21 @@ export function PlayerSetup({ onDone, onExit, initialNames }: PlayerSetupProps) 
             </View>
           ))}
 
-          {names.length < MAX_PLAYERS && (
+          {names.length < MAX_TEAMS && (
             <Pressable
-              onPress={addPlayer}
+              onPress={addTeam}
               accessibilityRole="button"
-              accessibilityLabel="Add player"
+              accessibilityLabel="Add team"
               style={({ pressed }) => [styles.addBtn, { opacity: pressed ? 0.7 : 1 }]}
             >
-              <Ionicons name="add-circle-outline" size={20} color={colors.purple} />
-              <Text style={styles.addLabel}>Add Player</Text>
+              <Ionicons name="add-circle-outline" size={20} color={accent} />
+              <Text style={[styles.addLabel, { color: accent }]}>Add Team</Text>
             </Pressable>
           )}
         </ScrollView>
 
-        <PrimaryButton
-          label="Choose Categories"
-          icon="arrow-forward"
-          onPress={() => onDone(names.map((n) => n.trim()))}
-          disabled={!canProceed}
-          color={colors.purple}
-        />
-        {!canProceed && names.some((n) => !n.trim()) && (
-          <Text style={styles.warning}>All name fields must be filled in.</Text>
-        )}
+        <PrimaryButton label="Start Game" icon="play" color={accent} onPress={start} disabled={!canStart} />
+        {!canStart && hasBlank && <Text style={styles.warning}>Team names can't be empty.</Text>}
       </View>
     </KeyboardAvoidingView>
   );
@@ -151,25 +134,30 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     marginBottom: spacing.sm,
-    paddingLeft: 48,
+    paddingLeft: 48, // clear the host's floating Home button
+  },
+  backBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    marginLeft: -4,
+  },
+  backText: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 16,
+    color: colors.text,
   },
   title: {
     fontFamily: fonts.display,
-    fontSize: 30,
+    fontSize: 32,
     color: colors.text,
-  },
-  closeBtn: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   sub: {
     fontFamily: fonts.bodyRegular,
     fontSize: 15,
     color: colors.textMuted,
+    marginTop: spacing.xs,
     marginBottom: spacing.xl,
   },
   scroll: {
@@ -188,14 +176,12 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: radius.pill,
-    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
   indexText: {
-    fontFamily: fonts.bodyBold,
+    fontFamily: fonts.bodyExtra,
     fontSize: 13,
-    color: colors.textMuted,
   },
   input: {
     flex: 1,
@@ -223,7 +209,6 @@ const styles = StyleSheet.create({
   addLabel: {
     fontFamily: fonts.bodySemi,
     fontSize: 15,
-    color: colors.purple,
   },
   warning: {
     fontFamily: fonts.bodyRegular,

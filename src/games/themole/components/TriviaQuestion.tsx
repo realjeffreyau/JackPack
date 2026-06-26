@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     flexWrap: 'wrap',
+    paddingLeft: 48,
   },
   roundPill: {
     backgroundColor: colors.surface,

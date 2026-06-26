@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     color: colors.danger,
     marginBottom: spacing.md,
     textTransform: 'uppercase',
+    paddingLeft: 48,
   },
   promptCard: {
     backgroundColor: colors.surface,

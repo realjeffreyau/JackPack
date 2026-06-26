@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     color: colors.text,
     marginBottom: spacing.sm,
+    paddingLeft: 48,
   },
   sub: {
     fontFamily: fonts.body,
