@@ -11,6 +11,8 @@ interface RoundRecapProps {
   incorrectCount: number;
   groupPot: number;
   molePot: number;
+  groupThreshold: number;
+  moleThreshold: number;
   onNext: () => void;
   isLastRound: boolean;
 }
@@ -22,10 +24,14 @@ export function RoundRecap({
   incorrectCount,
   groupPot,
   molePot,
+  groupThreshold,
+  moleThreshold,
   onNext,
   isLastRound,
 }: RoundRecapProps) {
   const insets = useSafeAreaInsets();
+  const groupPct = groupThreshold > 0 ? Math.min(100, (groupPot / groupThreshold) * 100) : 0;
+  const molePct = moleThreshold > 0 ? Math.min(100, (molePot / moleThreshold) * 100) : 0;
 
   return (
     <View
@@ -54,7 +60,7 @@ export function RoundRecap({
         </View>
 
         <View style={styles.potsSection}>
-          <Text style={styles.potsTitle}>CURRENT POTS</Text>
+          <Text style={styles.potsTitle}>PROGRESS TO AUTO-WIN</Text>
           <View style={styles.potsRow}>
             <View style={styles.potCard}>
               <Text style={styles.potEmoji}>👥</Text>
@@ -62,6 +68,10 @@ export function RoundRecap({
               <Text style={[styles.potValue, { color: colors.success, ...glow(colors.success, 0.4) }]}>
                 {groupPot.toLocaleString()}
               </Text>
+              <Text style={styles.potTarget}>/ {groupThreshold.toLocaleString()}</Text>
+              <View style={styles.barTrack}>
+                <View style={[styles.barFill, { width: `${groupPct}%`, backgroundColor: colors.success }]} />
+              </View>
             </View>
             <View style={styles.potDivider} />
             <View style={styles.potCard}>
@@ -70,6 +80,10 @@ export function RoundRecap({
               <Text style={[styles.potValue, { color: colors.purple, ...glow(colors.purple, 0.4) }]}>
                 {molePot.toLocaleString()}
               </Text>
+              <Text style={styles.potTarget}>/ {moleThreshold.toLocaleString()}</Text>
+              <View style={styles.barTrack}>
+                <View style={[styles.barFill, { width: `${molePct}%`, backgroundColor: colors.purple }]} />
+              </View>
             </View>
           </View>
         </View>
@@ -189,6 +203,24 @@ const styles = StyleSheet.create({
   potValue: {
     fontFamily: fonts.display,
     fontSize: 28,
+  },
+  potTarget: {
+    fontFamily: fonts.bodySemi,
+    fontSize: 12,
+    color: colors.textFaint,
+    marginTop: -2,
+  },
+  barTrack: {
+    width: '100%',
+    height: 6,
+    borderRadius: radius.pill,
+    backgroundColor: colors.bg,
+    overflow: 'hidden',
+    marginTop: spacing.sm,
+  },
+  barFill: {
+    height: '100%',
+    borderRadius: radius.pill,
   },
   suspicion: {
     fontFamily: fonts.bodyRegular,

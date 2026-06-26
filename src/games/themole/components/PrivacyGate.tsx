@@ -10,7 +10,7 @@ interface PrivacyGateProps {
   onReveal: () => void;
 }
 
-const HOLD_DURATION = 1500;
+const HOLD_DURATION = 1071; // 1.4× faster than the original 1500ms
 
 export function PrivacyGate({ playerName, context, onReveal }: PrivacyGateProps) {
   const insets = useSafeAreaInsets();

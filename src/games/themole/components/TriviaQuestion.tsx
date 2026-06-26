@@ -9,6 +9,7 @@ interface TriviaQuestionProps {
   question: MoleQuestion;
   currentRound: number;
   totalRounds: number;
+  revealChoices?: boolean;
   onStartAnswering: () => void;
 }
 
@@ -18,10 +19,13 @@ const CATEGORY_LABELS: Record<string, string> = {
   history: 'History & Geography',
 };
 
+const OPTION_LABELS = ['A', 'B', 'C', 'D'] as const;
+
 export function TriviaQuestion({
   question,
   currentRound,
   totalRounds,
+  revealChoices = false,
   onStartAnswering,
 }: TriviaQuestionProps) {
   const insets = useSafeAreaInsets();
@@ -49,6 +53,18 @@ export function TriviaQuestion({
         <View style={styles.questionCard}>
           <Text style={styles.question}>{question.question}</Text>
         </View>
+        {revealChoices && (
+          <View style={styles.options}>
+            {question.options.map((option, i) => (
+              <View key={i} style={styles.option}>
+                <View style={styles.optionLabel}>
+                  <Text style={styles.optionLabelText}>{OPTION_LABELS[i]}</Text>
+                </View>
+                <Text style={styles.optionText}>{option}</Text>
+              </View>
+            ))}
+          </View>
+        )}
         <Text style={styles.optionsHint}>Discuss out loud before anyone locks in their answer.</Text>
       </View>
 
@@ -130,6 +146,42 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     color: colors.text,
     textAlign: 'center',
+  },
+  options: {
+    gap: spacing.sm,
+  },
+  option: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.bgElevated,
+    borderRadius: radius.md,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    gap: spacing.md,
+    minHeight: 52,
+  },
+  optionLabel: {
+    width: 30,
+    height: 30,
+    borderRadius: radius.pill,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  optionLabelText: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 13,
+    color: colors.textMuted,
+  },
+  optionText: {
+    flex: 1,
+    fontFamily: fonts.body,
+    fontSize: 15,
+    color: colors.textMuted,
   },
   optionsHint: {
     fontFamily: fonts.bodyRegular,

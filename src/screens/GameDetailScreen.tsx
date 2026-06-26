@@ -7,6 +7,7 @@ import { getGame } from '../data/games';
 import { isPlayable } from '../games/registry';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { Stepper } from '../components/Stepper';
+import { Toggle } from '../components/Toggle';
 import { colors, fonts, radius, spacing } from '../theme/theme';
 
 export function GameDetailScreen({ navigation, route }: GameDetailScreenProps) {
@@ -16,6 +17,7 @@ export function GameDetailScreen({ navigation, route }: GameDetailScreenProps) {
   const cfg = game?.settings;
   const [roundLength, setRoundLength] = useState(cfg?.defaultRoundLength ?? 60);
   const [rounds, setRounds] = useState(cfg?.defaultRounds ?? 5);
+  const [revealChoices, setRevealChoices] = useState(cfg?.defaultRevealChoices ?? false);
 
   if (!game) {
     return (
@@ -34,6 +36,7 @@ export function GameDetailScreen({ navigation, route }: GameDetailScreenProps) {
       gameId: game.id,
       roundLength,
       totalRounds: rounds,
+      revealChoices,
     });
 
   return (
@@ -114,6 +117,14 @@ export function GameDetailScreen({ navigation, route }: GameDetailScreenProps) {
                 canDecrement={rounds > cfg.minRounds}
                 canIncrement={rounds < cfg.maxRounds}
               />
+              {cfg.defaultRevealChoices !== undefined && (
+                <Toggle
+                  label="Reveal answer choices"
+                  value={revealChoices}
+                  accent={accent}
+                  onValueChange={setRevealChoices}
+                />
+              )}
             </View>
           </>
         )}

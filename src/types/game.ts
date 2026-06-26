@@ -12,6 +12,8 @@ export interface GameSettingsConfig {
   roundLengthStep: number;
   minRounds: number;
   maxRounds: number;
+  /** Default for the "reveal answer choices" toggle (off when omitted). */
+  defaultRevealChoices?: boolean;
 }
 
 /**
@@ -42,6 +44,8 @@ export interface Game {
 export interface GameEngineProps {
   roundLength: number;
   totalRounds: number;
+  /** When true, the group question screen reveals the answer choices. */
+  revealChoices?: boolean;
   /** Call to leave the game and return to the home screen. */
   onExit: () => void;
 }
