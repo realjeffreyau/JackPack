@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -13,6 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { colors, fonts, radius, spacing } from '../../../theme/theme';
+import { PLAYER_NAMES_KEY, clearSavedNames, loadSavedNames, persistNames } from '../../../utils/savedNames';
 
 interface PlayerSetupProps {
   onDone: (names: string[]) => void;
@@ -28,6 +30,28 @@ export function PlayerSetup({ onDone, onExit, initialNames }: PlayerSetupProps) 
   const [names, setNames] = useState<string[]>(
     initialNames && initialNames.length >= MIN_PLAYERS ? initialNames : ['', '', ''],
   );
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const didLoad = useRef(false);
+
+  useEffect(() => {
+    if (initialNames && initialNames.length >= MIN_PLAYERS) {
+      didLoad.current = true;
+      return;
+    }
+    loadSavedNames(PLAYER_NAMES_KEY).then((saved) => {
+      if (saved && saved.length >= MIN_PLAYERS) setNames(saved);
+      didLoad.current = true;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!didLoad.current) return;
+    const filled = names.map((n) => n.trim()).filter(Boolean);
+    if (filled.length === 0) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => persistNames(PLAYER_NAMES_KEY, filled), 400);
+    return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
+  }, [names]);
 
   function updateName(index: number, value: string) {
     setNames((prev) => {
@@ -49,8 +73,26 @@ export function PlayerSetup({ onDone, onExit, initialNames }: PlayerSetupProps) 
     }
   }
 
+  function clearAll() {
+    Alert.alert('Clear saved player names?', 'Player list will be reset.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Clear',
+        style: 'destructive',
+        onPress: () => {
+          clearSavedNames(PLAYER_NAMES_KEY);
+          setNames(['', '', '']);
+        },
+      },
+    ]);
+  }
+
   const filled = names.map((n) => n.trim()).filter(Boolean);
   const canProceed = filled.length >= MIN_PLAYERS && filled.length === names.length;
+
+  function proceed() {
+    onDone(names.map((n) => n.trim()));
+  }
 
   return (
     <KeyboardAvoidingView
@@ -65,15 +107,27 @@ export function PlayerSetup({ onDone, onExit, initialNames }: PlayerSetupProps) 
       >
         <View style={styles.topBar}>
           <Text style={styles.title}>Who's Playing?</Text>
-          <Pressable
-            onPress={onExit}
-            hitSlop={10}
-            accessibilityRole="button"
-            accessibilityLabel="Exit game"
-            style={({ pressed }) => [styles.closeBtn, { opacity: pressed ? 0.6 : 1 }]}
-          >
-            <Ionicons name="close" size={24} color={colors.textMuted} />
-          </Pressable>
+          <View style={styles.topRight}>
+            <Pressable
+              onPress={clearAll}
+              hitSlop={10}
+              accessibilityRole="button"
+              accessibilityLabel="Clear all player names"
+              style={({ pressed }) => [styles.clearBtn, { opacity: pressed ? 0.6 : 1 }]}
+            >
+              <Ionicons name="trash-outline" size={18} color={colors.textFaint} />
+              <Text style={styles.clearText}>Clear All</Text>
+            </Pressable>
+            <Pressable
+              onPress={onExit}
+              hitSlop={10}
+              accessibilityRole="button"
+              accessibilityLabel="Exit game"
+              style={({ pressed }) => [styles.closeBtn, { opacity: pressed ? 0.6 : 1 }]}
+            >
+              <Ionicons name="close" size={24} color={colors.textMuted} />
+            </Pressable>
+          </View>
         </View>
 
         <Text style={styles.sub}>Enter each player's name before starting.</Text>
@@ -130,7 +184,7 @@ export function PlayerSetup({ onDone, onExit, initialNames }: PlayerSetupProps) 
         <PrimaryButton
           label="Choose Categories"
           icon="arrow-forward"
-          onPress={() => onDone(names.map((n) => n.trim()))}
+          onPress={proceed}
           disabled={!canProceed}
           color={colors.purple}
         />
@@ -159,6 +213,21 @@ const styles = StyleSheet.create({
     fontFamily: fonts.display,
     fontSize: 30,
     color: colors.text,
+  },
+  topRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  clearBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  clearText: {
+    fontFamily: fonts.bodySemi,
+    fontSize: 14,
+    color: colors.textFaint,
   },
   closeBtn: {
     width: 40,

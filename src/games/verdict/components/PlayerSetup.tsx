@@ -14,24 +14,31 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { colors, fonts, radius, spacing } from '../../../theme/theme';
-import { MAX_PLAYERS, MIN_PLAYERS, hasDuplicateNames, makePlayerId, type Player } from '../types';
 import { PLAYER_NAMES_KEY, clearSavedNames, loadSavedNames, persistNames } from '../../../utils/savedNames';
+import type { VerdictPlayer } from '../types';
 
-interface Props {
-  accent: string;
-  onDone: (players: Player[]) => void;
-  onBack: () => void;
+const MIN_PLAYERS = 4;
+const MAX_PLAYERS = 8;
+
+function makeId(): string {
+  return `vp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-export function PlayerSetup({ accent, onDone, onBack }: Props) {
+interface Props {
+  onDone: (players: VerdictPlayer[]) => void;
+}
+
+export function PlayerSetup({ onDone }: Props) {
   const insets = useSafeAreaInsets();
-  const [names, setNames] = useState<string[]>(['Player 1', 'Player 2', 'Player 3']);
+  const [names, setNames] = useState<string[]>(['', '', '', '']);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const didLoad = useRef(false);
 
   useEffect(() => {
     loadSavedNames(PLAYER_NAMES_KEY).then((saved) => {
-      if (saved && saved.length >= MIN_PLAYERS) setNames(saved);
+      if (saved && saved.length >= MIN_PLAYERS) {
+        setNames(saved.slice(0, MAX_PLAYERS));
+      }
       didLoad.current = true;
     });
   }, []);
@@ -48,9 +55,11 @@ export function PlayerSetup({ accent, onDone, onBack }: Props) {
   function updateName(i: number, v: string) {
     setNames((prev) => prev.map((n, idx) => (idx === i ? v : n)));
   }
+
   function addPlayer() {
-    if (names.length < MAX_PLAYERS) setNames((prev) => [...prev, `Player ${prev.length + 1}`]);
+    if (names.length < MAX_PLAYERS) setNames((prev) => [...prev, '']);
   }
+
   function removePlayer(i: number) {
     if (names.length > MIN_PLAYERS) setNames((prev) => prev.filter((_, idx) => idx !== i));
   }
@@ -63,36 +72,35 @@ export function PlayerSetup({ accent, onDone, onBack }: Props) {
         style: 'destructive',
         onPress: () => {
           clearSavedNames(PLAYER_NAMES_KEY);
-          setNames(['Player 1', 'Player 2', 'Player 3']);
+          setNames(['', '', '', '']);
         },
       },
     ]);
   }
 
   const filled = names.map((n) => n.trim()).filter(Boolean);
-  const dup = hasDuplicateNames(names);
-  const canStart = filled.length >= MIN_PLAYERS && filled.length === names.length && !dup;
-  const blank = names.some((n) => !n.trim());
+  const hasDupes = new Set(filled).size !== filled.length;
+  const canStart = filled.length >= MIN_PLAYERS && filled.length === names.length && !hasDupes;
 
   function start() {
-    const trimmed = names.map((n) => n.trim());
-    onDone(trimmed.map((n) => ({ id: makePlayerId(), name: n, points: 0 })));
+    const players: VerdictPlayer[] = names.map((n) => ({
+      id: makeId(),
+      name: n.trim(),
+      credibility: 0,
+    }));
+    onDone(players);
   }
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <View style={[styles.root, { paddingTop: insets.top + spacing.md, paddingBottom: insets.bottom + spacing.lg }]}>
+      <View
+        style={[
+          styles.root,
+          { paddingTop: insets.top + spacing.md, paddingBottom: insets.bottom + spacing.lg },
+        ]}
+      >
         <View style={styles.topBar}>
-          <Pressable
-            onPress={onBack}
-            hitSlop={10}
-            accessibilityRole="button"
-            accessibilityLabel="Back"
-            style={({ pressed }) => [styles.backBtn, { opacity: pressed ? 0.6 : 1 }]}
-          >
-            <Ionicons name="chevron-back" size={22} color={colors.text} />
-            <Text style={styles.backText}>Back</Text>
-          </Pressable>
+          <Text style={styles.title}>Who's Playing?</Text>
           <Pressable
             onPress={clearAll}
             hitSlop={10}
@@ -104,9 +112,7 @@ export function PlayerSetup({ accent, onDone, onBack }: Props) {
             <Text style={styles.clearText}>Clear All</Text>
           </Pressable>
         </View>
-
-        <Text style={styles.title}>Players</Text>
-        <Text style={styles.sub}>At least {MIN_PLAYERS}, up to {MAX_PLAYERS}.</Text>
+        <Text style={styles.sub}>{MIN_PLAYERS}–{MAX_PLAYERS} players</Text>
 
         <ScrollView
           style={styles.scroll}
@@ -116,8 +122,8 @@ export function PlayerSetup({ accent, onDone, onBack }: Props) {
         >
           {names.map((name, i) => (
             <View key={i} style={styles.row}>
-              <View style={[styles.indexPill, { backgroundColor: accent + '22' }]}>
-                <Text style={[styles.indexText, { color: accent }]}>{i + 1}</Text>
+              <View style={[styles.indexPill, { backgroundColor: colors.yellow + '22' }]}>
+                <Text style={[styles.indexText, { color: colors.yellow }]}>{i + 1}</Text>
               </View>
               <TextInput
                 style={styles.input}
@@ -127,6 +133,7 @@ export function PlayerSetup({ accent, onDone, onBack }: Props) {
                 placeholderTextColor={colors.textFaint}
                 maxLength={18}
                 autoCapitalize="words"
+                returnKeyType="next"
                 accessibilityLabel={`Player ${i + 1} name`}
               />
               {names.length > MIN_PLAYERS && (
@@ -150,15 +157,25 @@ export function PlayerSetup({ accent, onDone, onBack }: Props) {
               accessibilityLabel="Add player"
               style={({ pressed }) => [styles.addBtn, { opacity: pressed ? 0.7 : 1 }]}
             >
-              <Ionicons name="add-circle-outline" size={20} color={accent} />
-              <Text style={[styles.addLabel, { color: accent }]}>Add Player</Text>
+              <Ionicons name="add-circle-outline" size={20} color={colors.yellow} />
+              <Text style={[styles.addLabel, { color: colors.yellow }]}>Add Player</Text>
             </Pressable>
           )}
         </ScrollView>
 
-        <PrimaryButton label="Start Game" icon="play" color={accent} onPress={start} disabled={!canStart} />
-        {!canStart && blank && <Text style={styles.warning}>Player names can't be empty.</Text>}
-        {!canStart && !blank && dup && <Text style={styles.warning}>Player names must be unique.</Text>}
+        <PrimaryButton
+          label="Choose Rounds"
+          icon="arrow-forward"
+          color={colors.yellow}
+          onPress={start}
+          disabled={!canStart}
+        />
+        {!canStart && names.some((n) => !n.trim()) && (
+          <Text style={styles.warning}>All name fields must be filled in.</Text>
+        )}
+        {!canStart && !names.some((n) => !n.trim()) && hasDupes && (
+          <Text style={styles.warning}>Player names must be unique.</Text>
+        )}
       </View>
     </KeyboardAvoidingView>
   );
@@ -166,17 +183,32 @@ export function PlayerSetup({ accent, onDone, onBack }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg, paddingHorizontal: spacing.xl },
-  topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm, paddingLeft: 48 },
-  backBtn: { flexDirection: 'row', alignItems: 'center', gap: 2, marginLeft: -4 },
-  backText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.text },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.sm,
+    paddingLeft: 48,
+  },
+  title: { fontFamily: fonts.display, fontSize: 32, color: colors.text },
   clearBtn: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   clearText: { fontFamily: fonts.bodySemi, fontSize: 14, color: colors.textFaint },
-  title: { fontFamily: fonts.display, fontSize: 32, color: colors.text },
-  sub: { fontFamily: fonts.bodyRegular, fontSize: 15, color: colors.textMuted, marginTop: spacing.xs, marginBottom: spacing.xl },
+  sub: {
+    fontFamily: fonts.bodyRegular,
+    fontSize: 15,
+    color: colors.textMuted,
+    marginBottom: spacing.xl,
+  },
   scroll: { flex: 1 },
   scrollContent: { gap: spacing.md, paddingBottom: spacing.xl },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  indexPill: { width: 32, height: 32, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  indexPill: {
+    width: 32,
+    height: 32,
+    borderRadius: radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   indexText: { fontFamily: fonts.bodyExtra, fontSize: 13 },
   input: {
     flex: 1,
@@ -192,7 +224,19 @@ const styles = StyleSheet.create({
     minHeight: 48,
   },
   removeBtn: { padding: spacing.xs },
-  addBtn: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.md, alignSelf: 'center' },
+  addBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingVertical: spacing.md,
+    alignSelf: 'center',
+  },
   addLabel: { fontFamily: fonts.bodySemi, fontSize: 15 },
-  warning: { fontFamily: fonts.bodyRegular, fontSize: 13, color: colors.danger, textAlign: 'center', marginTop: spacing.sm },
+  warning: {
+    fontFamily: fonts.bodyRegular,
+    fontSize: 13,
+    color: colors.danger,
+    textAlign: 'center',
+    marginTop: spacing.sm,
+  },
 });

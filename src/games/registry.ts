@@ -4,6 +4,7 @@ import { TheMoleEngine } from './themole/TheMoleEngine';
 import { ParanoiaEngine } from './paranoia/ParanoiaEngine';
 import { OutblurtEngine } from './outblurt/OutblurtEngine';
 import { SecretAgendaEngine } from './secretagenda/SecretAgendaEngine';
+import { VerdictEngine } from './verdict/VerdictEngine';
 
 /**
  * Maps a game id to its playable engine component. To ship a new game, build
@@ -15,6 +16,7 @@ export const GAME_ENGINES: Record<string, GameEngine> = {
   'paranoia': ParanoiaEngine,
   'outblurt': OutblurtEngine,
   'secret-agenda': SecretAgendaEngine,
+  'verdict': VerdictEngine,
 };
 
 export function getGameEngine(id: string): GameEngine | undefined {

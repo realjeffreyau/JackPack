@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { colors, fonts, radius, spacing } from '../../../theme/theme';
 import { MAX_TEAMS, MIN_TEAMS, makeTeamId, type Team } from '../types';
+import { TEAM_NAMES_KEY, persistNames } from '../../../utils/savedNames';
 
 interface Props {
   visible: boolean;
@@ -63,12 +64,20 @@ export function ManageTeamsModal({ visible, accent, teams, onSave, onCancel }: P
     ]);
   }
 
+  function clearNames() {
+    Alert.alert('Clear all team names?', 'Names will be reset to blank.', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Clear', style: 'destructive', onPress: () => setDraft((prev) => prev.map((t) => ({ ...t, name: '' }))) },
+    ]);
+  }
+
   function save() {
     const trimmed = draft.map((t) => ({ ...t, name: t.name.trim() }));
     if (trimmed.some((t) => !t.name) || trimmed.length < MIN_TEAMS) {
       setShowWarning(true);
       return;
     }
+    persistNames(TEAM_NAMES_KEY, trimmed.map((t) => t.name));
     onSave(trimmed);
   }
 
@@ -156,6 +165,7 @@ export function ManageTeamsModal({ visible, accent, teams, onSave, onCancel }: P
               <PrimaryButton label="Cancel" variant="ghost" size="md" color={colors.textMuted} onPress={onCancel} style={styles.flex} />
               <PrimaryButton label="Clear Points" variant="outline" size="md" color={colors.danger} onPress={clearPoints} style={styles.flex} />
             </View>
+            <PrimaryButton label="Clear Names" variant="outline" size="md" color={colors.danger} onPress={clearNames} />
             <PrimaryButton label="Save" icon="checkmark" color={accent} onPress={save} />
           </View>
         </View>

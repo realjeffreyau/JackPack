@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { colors, fonts, radius, spacing } from '../../../theme/theme';
 import { MAX_PLAYERS, MIN_PLAYERS, hasDuplicateNames, makePlayerId, type Player } from '../types';
+import { PLAYER_NAMES_KEY, persistNames } from '../../../utils/savedNames';
 
 interface Props {
   visible: boolean;
@@ -58,11 +59,19 @@ export function EditPlayersModal({ visible, accent, players, restartWarning, onS
     ]);
   }
 
+  function clearNames() {
+    Alert.alert('Clear all player names?', 'Names will be reset to blank.', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Clear', style: 'destructive', onPress: () => setDraft((prev) => prev.map((p) => ({ ...p, name: '' }))) },
+    ]);
+  }
+
   function commit() {
     const trimmed = draft.map((p) => ({ ...p, name: p.name.trim() }));
-    if (trimmed.some((p) => !p.name)) { setWarn('Player names can’t be empty.'); return; }
+    if (trimmed.some((p) => !p.name)) { setWarn("Player names can’t be empty."); return; }
     if (trimmed.length < MIN_PLAYERS) { setWarn(`You need at least ${MIN_PLAYERS} players.`); return; }
-    if (hasDuplicateNames(trimmed.map((p) => p.name))) { setWarn('Player names must be unique.'); return; }
+    if (hasDuplicateNames(trimmed.map((p) => p.name))) { setWarn("Player names must be unique."); return; }
+    persistNames(PLAYER_NAMES_KEY, trimmed.map((p) => p.name));
     onSave(trimmed);
   }
 
@@ -159,6 +168,7 @@ export function EditPlayersModal({ visible, accent, players, restartWarning, onS
               <PrimaryButton label="Cancel" variant="ghost" size="md" color={colors.textMuted} onPress={onCancel} style={styles.flex} />
               <PrimaryButton label="Clear Scores" variant="outline" size="md" color={colors.danger} onPress={clearScores} style={styles.flex} />
             </View>
+            <PrimaryButton label="Clear Names" variant="outline" size="md" color={colors.danger} onPress={clearNames} />
             <PrimaryButton label={restartWarning ? 'Save & Restart' : 'Save'} icon="checkmark" color={accent} onPress={save} />
           </View>
         </View>

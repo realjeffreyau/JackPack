@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -14,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { colors, fonts, radius, spacing } from '../../../theme/theme';
 import { MAX_TEAMS, MIN_TEAMS, makeTeamId, type Team } from '../types';
+import { TEAM_NAMES_KEY, clearSavedNames, loadSavedNames, persistNames } from '../../../utils/savedNames';
 
 interface Props {
   accent: string;
@@ -24,6 +26,25 @@ interface Props {
 export function TeamSetup({ accent, onDone, onBack }: Props) {
   const insets = useSafeAreaInsets();
   const [names, setNames] = useState<string[]>(['Team 1', 'Team 2']);
+
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const didLoad = useRef(false);
+
+  useEffect(() => {
+    loadSavedNames(TEAM_NAMES_KEY).then((saved) => {
+      if (saved && saved.length >= MIN_TEAMS) setNames(saved);
+      didLoad.current = true;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!didLoad.current) return;
+    const filled = names.map((n) => n.trim()).filter(Boolean);
+    if (filled.length === 0) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => persistNames(TEAM_NAMES_KEY, filled), 400);
+    return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
+  }, [names]);
 
   function updateName(index: number, value: string) {
     setNames((prev) => {
@@ -39,6 +60,20 @@ export function TeamSetup({ accent, onDone, onBack }: Props) {
 
   function removeTeam(index: number) {
     if (names.length > MIN_TEAMS) setNames((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function clearAll() {
+    Alert.alert('Clear saved team names?', 'Team names will be reset.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Clear',
+        style: 'destructive',
+        onPress: () => {
+          clearSavedNames(TEAM_NAMES_KEY);
+          setNames(['Team 1', 'Team 2']);
+        },
+      },
+    ]);
   }
 
   const filled = names.map((n) => n.trim()).filter(Boolean);
@@ -63,6 +98,16 @@ export function TeamSetup({ accent, onDone, onBack }: Props) {
           >
             <Ionicons name="chevron-back" size={22} color={colors.text} />
             <Text style={styles.backText}>Back</Text>
+          </Pressable>
+          <Pressable
+            onPress={clearAll}
+            hitSlop={10}
+            accessibilityRole="button"
+            accessibilityLabel="Clear all team names"
+            style={({ pressed }) => [styles.clearBtn, { opacity: pressed ? 0.6 : 1 }]}
+          >
+            <Ionicons name="trash-outline" size={18} color={colors.textFaint} />
+            <Text style={styles.clearText}>Clear All</Text>
           </Pressable>
         </View>
 
@@ -134,6 +179,7 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: spacing.sm,
     paddingLeft: 48, // clear the host's floating Home button
   },
@@ -147,6 +193,16 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyBold,
     fontSize: 16,
     color: colors.text,
+  },
+  clearBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  clearText: {
+    fontFamily: fonts.bodySemi,
+    fontSize: 14,
+    color: colors.textFaint,
   },
   title: {
     fontFamily: fonts.display,
