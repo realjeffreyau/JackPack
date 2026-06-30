@@ -116,13 +116,16 @@ export function RoleDeal({ players, activeSlots, dealIndex, revealed, onReveal, 
     <View
       style={[
         styles.cardRoot,
-        { paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + spacing.xl },
+        { paddingTop: insets.top + spacing.xs, paddingBottom: insets.bottom + spacing.xl },
       ]}
     >
-      <ScrollView contentContainerStyle={styles.cardScroll} showsVerticalScrollIndicator={false}>
+      {/* Fixed header clears the HomeButton — paddingLeft:48 pushes name past the 40pt button */}
+      <View style={styles.cardHeader}>
         <Text style={styles.cardFor}>{player.name}</Text>
         <Text style={[styles.roleTitle, { color: colors.yellow }]}>{slot.roleTitle}</Text>
+      </View>
 
+      <ScrollView contentContainerStyle={styles.cardScroll} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>Your Private Information</Text>
           <Text style={styles.sectionText}>{slot.interpolatedPrivateInfo}</Text>
@@ -199,6 +202,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     paddingHorizontal: spacing.xl,
   },
+  cardHeader: {
+    paddingLeft: 48,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
+  },
   cardScroll: {
     paddingBottom: spacing.xl,
     gap: spacing.lg,
@@ -209,12 +217,11 @@ const styles = StyleSheet.create({
     color: colors.textFaint,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginTop: spacing.md,
+    marginBottom: spacing.xs,
   },
   roleTitle: {
     fontFamily: fonts.display,
     fontSize: 30,
-    marginBottom: spacing.sm,
   },
   section: {
     backgroundColor: colors.bgElevated,

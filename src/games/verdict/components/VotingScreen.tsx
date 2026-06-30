@@ -98,8 +98,10 @@ function VoteBallot({
 
   return (
     <ScrollView contentContainerStyle={styles.ballotScroll} showsVerticalScrollIndicator={false}>
-      <Text style={styles.ballotFor}>Voting as</Text>
-      <Text style={[styles.ballotName, { color: colors.yellow }]}>{player.name}</Text>
+      <View style={styles.ballotHeader}>
+        <Text style={styles.ballotFor}>Voting as</Text>
+        <Text style={[styles.ballotName, { color: colors.yellow }]}>{player.name}</Text>
+      </View>
 
       <Text style={styles.question}>{scaledCase.template.votingQuestions.culprit}</Text>
       <View style={styles.choices}>
@@ -225,13 +227,17 @@ const styles = StyleSheet.create({
   fill: {},
   hint: { fontFamily: fonts.body, fontSize: 14, color: colors.textFaint },
   ballotScroll: { paddingBottom: spacing.xl, gap: spacing.lg },
+  ballotHeader: {
+    paddingLeft: 48,
+    paddingTop: spacing.md,
+  },
   ballotFor: {
     fontFamily: fonts.bodySemi,
     fontSize: 13,
     color: colors.textFaint,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginTop: spacing.md,
+    marginBottom: spacing.xs,
   },
   ballotName: {
     fontFamily: fonts.display,

@@ -9,6 +9,7 @@ export type ScoringType =
   | 'wants_culprit_free'
   | 'wants_helper_hidden'
   | 'wants_self_not_convicted'
+  | 'wants_culprit_protected'
   | 'neutral';
 
 export interface ScoringRule {

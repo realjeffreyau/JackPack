@@ -85,6 +85,20 @@ export function evaluateRound(
           reason: success ? 'You avoided wrongful conviction.' : 'The group wrongly convicted you.',
         };
       }
+      case 'wants_culprit_protected': {
+        const success = verdict.culpritId !== truthCulpritId;
+        return {
+          playerId: pid,
+          playerName: name,
+          roleTitle: slot.roleTitle,
+          objectiveText: slot.objectiveText,
+          succeeded: success,
+          pointsChange: success ? 3 : -2,
+          reason: success
+            ? 'The real culprit was not convicted.'
+            : 'The group saw through your deception.',
+        };
+      }
       case 'neutral': {
         return {
           playerId: pid,
