@@ -3,7 +3,6 @@ import { TruthBombEngine } from './truthbomb/TruthBombEngine';
 import { TheMoleEngine } from './themole/TheMoleEngine';
 import { ParanoiaEngine } from './paranoia/ParanoiaEngine';
 import { OutblurtEngine } from './outblurt/OutblurtEngine';
-import { SecretAgendaEngine } from './secretagenda/SecretAgendaEngine';
 import { VerdictEngine } from './verdict/VerdictEngine';
 
 /**
@@ -15,7 +14,6 @@ export const GAME_ENGINES: Record<string, GameEngine> = {
   'the-mole': TheMoleEngine,
   'paranoia': ParanoiaEngine,
   'outblurt': OutblurtEngine,
-  'secret-agenda': SecretAgendaEngine,
   'verdict': VerdictEngine,
 };
 

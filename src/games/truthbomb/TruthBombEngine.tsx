@@ -9,6 +9,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { CountdownDisplay } from '../../components/CountdownDisplay';
 import { PrimaryButton } from '../../components/PrimaryButton';
 import { colors, fonts, glow, radius, spacing } from '../../theme/theme';
+import { loadSounds, playFastTickSound, playTickSound, unloadSounds } from './sounds';
 
 type Phase = 'playing' | 'bomb' | 'gameover';
 
@@ -56,11 +57,28 @@ export function TruthBombEngine({ roundLength, totalRounds, onExit }: GameEngine
     ]);
   }, [onExit]);
 
+  // ---- Sound lifecycle --------------------------------------------------------
+  useEffect(() => {
+    loadSounds();
+    return () => {
+      unloadSounds();
+    };
+  }, []);
+
   // ---- Timer ----------------------------------------------------------------
   useEffect(() => {
     if (phase !== 'playing') return undefined;
     const id = setInterval(() => {
-      setTimeLeft((t) => (t <= 1 ? 0 : t - 1));
+      setTimeLeft((t) => {
+        if (t <= 1) return 0;
+        const next = t - 1;
+        if (next <= 5) {
+          playFastTickSound();
+        } else {
+          playTickSound();
+        }
+        return next;
+      });
     }, 1000);
     return () => clearInterval(id);
   }, [phase]);

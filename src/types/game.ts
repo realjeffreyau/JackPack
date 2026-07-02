@@ -36,6 +36,8 @@ export interface Game {
   maxPlayers: number;
   hasSettings: boolean;
   settings?: GameSettingsConfig;
+  /** When true, the Sidequests modifier can inject missions into this game. */
+  supportsSidequests?: boolean;
 }
 
 /**

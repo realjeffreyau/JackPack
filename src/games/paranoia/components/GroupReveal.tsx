@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { colors, fonts, glow, radius, spacing } from '../../../theme/theme';
 import type { Player } from '../types';
+import { AnonymizedResults } from './AnonymizedResults';
 
 interface Props {
   players: Player[];
@@ -13,6 +14,7 @@ interface Props {
   votes: Record<string, string>;
   predictions: Record<string, boolean>;
   revealIndex: number;
+  allCorrect: boolean;
   onNext: () => void;
   onDone: () => void;
 }
@@ -24,11 +26,26 @@ export function GroupReveal({
   votes,
   predictions,
   revealIndex,
+  allCorrect,
   onNext,
   onDone,
 }: Props) {
   const insets = useSafeAreaInsets();
   const candidates = players.filter((p) => p.id !== subjectId);
+
+  if (!allCorrect) {
+    return (
+      <AnonymizedResults
+        subjectName={subjectName}
+        candidates={candidates}
+        votes={votes}
+        predictions={predictions}
+        subjectId={subjectId}
+        onDone={onDone}
+      />
+    );
+  }
+
   const current = candidates[revealIndex];
   const isLast = revealIndex >= candidates.length - 1;
 

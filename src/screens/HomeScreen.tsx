@@ -1,14 +1,17 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { HomeScreenProps } from '../navigation/types';
 import { GAMES } from '../data/games';
 import { isPlayable } from '../games/registry';
 import { GameCard } from '../components/GameCard';
+import { SidequestPanel } from '../components/sidequests/SidequestPanel';
 import { colors, fonts, spacing } from '../theme/theme';
 
 export function HomeScreen({ navigation }: HomeScreenProps) {
   const insets = useSafeAreaInsets();
+  const [sidequestPanelOpen, setSidequestPanelOpen] = useState(false);
 
   return (
     <View style={styles.root}>
@@ -24,7 +27,20 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.kicker}>PASS-THE-PHONE</Text>
+        {/* Header row: kicker + sidequest icon */}
+        <View style={styles.headerRow}>
+          <Text style={styles.kicker}>PASS-THE-PHONE</Text>
+          <Pressable
+            onPress={() => setSidequestPanelOpen(true)}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel="Open Sidequests"
+            style={({ pressed }) => [styles.sqBtn, { opacity: pressed ? 0.7 : 1 }]}
+          >
+            <Ionicons name="compass" size={24} color={colors.sidequest} />
+          </Pressable>
+        </View>
+
         <Text style={styles.title}>JackPack</Text>
         <Text style={styles.subtitle}>
           One phone. Your whole crew. Pick a game and let chaos decide.
@@ -41,6 +57,10 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
           ))}
         </View>
       </ScrollView>
+
+      {sidequestPanelOpen && (
+        <SidequestPanel onClose={() => setSidequestPanelOpen(false)} />
+      )}
     </View>
   );
 }
@@ -67,12 +87,20 @@ const styles = StyleSheet.create({
     bottom: -140,
     left: -120,
   },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.xs,
+  },
   kicker: {
     fontFamily: fonts.bodyExtra,
     fontSize: 13,
     letterSpacing: 3,
     color: colors.primary,
-    marginBottom: spacing.xs,
+  },
+  sqBtn: {
+    padding: spacing.xs,
   },
   title: {
     fontFamily: fonts.display,

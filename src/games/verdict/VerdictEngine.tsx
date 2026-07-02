@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { colors } from '../../theme/theme';
 import type { GameEngineProps } from '../../types/game';
 import { VERDICT_CASES } from '../../data/verdict';
+import { getGame } from '../../data/games';
 import { shuffle } from '../../utils/deck';
 import { scaleCase } from './caseScaler';
 import { applyResults, calculateVerdict, evaluateRound } from './scoring';
@@ -16,6 +17,11 @@ import type {
   VoteSubPhase,
   VotesByQuestion,
 } from './types';
+import { BackButton } from '../../components/BackButton';
+import { useSidequestContext } from '../../sidequests/SidequestContext';
+import type { Sidequest } from '../../sidequests/types';
+import { SidequestModal } from '../../components/sidequests/SidequestModal';
+import { SidequestCheckModal } from '../../components/sidequests/SidequestCheckModal';
 import { Discussion } from './components/Discussion';
 import { FinalArgs } from './components/FinalArgs';
 import { FinalArgsPrompt } from './components/FinalArgsPrompt';
@@ -31,7 +37,17 @@ import { VotingScreen } from './components/VotingScreen';
 const DISCUSSION_TIME_BASE = 180;
 const DISCUSSION_TIME_LARGE = 300;
 
+type SqModalState = {
+  type: 'assign' | 'check';
+  playerId: string;
+  playerName: string;
+  sidequest: Sidequest;
+} | null;
+
 export function VerdictEngine({ onExit }: GameEngineProps) {
+  const sq = useSidequestContext();
+  const sqSupported = !!(getGame('verdict')?.supportsSidequests) && sq.enabled;
+  const [sqModal, setSqModal] = useState<SqModalState>(null);
   const [phase, setPhase] = useState<Phase>('player_setup');
   const [selectedRounds, setSelectedRounds] = useState<1 | 3 | 5>(3);
   const [players, setPlayers] = useState<VerdictPlayer[]>([]);
@@ -110,6 +126,42 @@ export function VerdictEngine({ onExit }: GameEngineProps) {
     return () => clearInterval(id);
   }, [phase]);
 
+  function showSidequestFor(playerId: string, playerName: string) {
+    const pending = sq.getPendingSidequest(playerId);
+    if (pending) {
+      setSqModal({ type: 'check', playerId, playerName, sidequest: pending });
+      return;
+    }
+    const newSq = sq.checkTrigger(playerId);
+    if (newSq) {
+      setSqModal({ type: 'assign', playerId, playerName, sidequest: newSq });
+    }
+  }
+
+  // Sidequest: role_deal reveal moment (after HoldGate, private screen)
+  useEffect(() => {
+    if (!sqSupported || phase !== 'role_deal' || !roleDealRevealed || sqModal) return;
+    const p = players[roleDealIndex];
+    if (p) showSidequestFor(p.id, p.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, roleDealIndex, roleDealRevealed, sqSupported]);
+
+  // Sidequest: final_args private turn
+  useEffect(() => {
+    if (!sqSupported || phase !== 'final_args' || sqModal) return;
+    const p = players[finalArgIndex];
+    if (p) showSidequestFor(p.id, p.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, finalArgIndex, sqSupported]);
+
+  // Sidequest: vote ballot (after gate, private to the voter)
+  useEffect(() => {
+    if (!sqSupported || phase !== 'voting' || voteSubPhase !== 'vote' || sqModal) return;
+    const p = players[voteIndex];
+    if (p) showSidequestFor(p.id, p.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, voteIndex, voteSubPhase, sqSupported]);
+
   function handlePlayersDone(newPlayers: VerdictPlayer[]) {
     setPlayers(newPlayers);
     setPhase('rounds_select');
@@ -117,6 +169,7 @@ export function VerdictEngine({ onExit }: GameEngineProps) {
 
   function handleRoundsDone(rounds: 1 | 3 | 5) {
     setSelectedRounds(rounds);
+    if (sqSupported) sq.startSession(players.map((p) => ({ id: p.id, name: p.name })));
     startNewRound(players, [], 1);
   }
 
@@ -222,6 +275,7 @@ export function VerdictEngine({ onExit }: GameEngineProps) {
   }
 
   function handleNewGame() {
+    if (sqSupported) sq.endSession();
     setPhase('player_setup');
     setPlayers([]);
     setUsedCaseIds([]);
@@ -233,7 +287,12 @@ export function VerdictEngine({ onExit }: GameEngineProps) {
     <View style={styles.root}>
       {phase === 'player_setup' && <PlayerSetup onDone={handlePlayersDone} />}
 
-      {phase === 'rounds_select' && <RoundsSelect onDone={handleRoundsDone} />}
+      {phase === 'rounds_select' && (
+        <>
+          <RoundsSelect onDone={handleRoundsDone} />
+          <BackButton onPress={() => setPhase('player_setup')} />
+        </>
+      )}
 
       {phase === 'round_intro' && scaledCase && (
         <RoundIntro
@@ -245,14 +304,19 @@ export function VerdictEngine({ onExit }: GameEngineProps) {
       )}
 
       {phase === 'role_deal' && scaledCase && (
-        <RoleDeal
-          players={players}
-          activeSlots={scaledCase.activeSlots}
-          dealIndex={roleDealIndex}
-          revealed={roleDealRevealed}
-          onReveal={handleRoleDealReveal}
-          onNext={handleRoleDealNext}
-        />
+        <>
+          <RoleDeal
+            players={players}
+            activeSlots={scaledCase.activeSlots}
+            dealIndex={roleDealIndex}
+            revealed={roleDealRevealed}
+            onReveal={handleRoleDealReveal}
+            onNext={handleRoleDealNext}
+          />
+          {roleDealIndex === 0 && !roleDealRevealed && (
+            <BackButton onPress={() => setPhase('rounds_select')} />
+          )}
+        </>
       )}
 
       {phase === 'discussion' && scaledCase && (
@@ -319,7 +383,31 @@ export function VerdictEngine({ onExit }: GameEngineProps) {
           players={players}
           onPlayAgain={handlePlayAgain}
           onNewGame={handleNewGame}
-          onHome={onExit}
+          onHome={() => {
+            if (sqSupported) sq.endSession();
+            onExit();
+          }}
+        />
+      )}
+      {sqModal?.type === 'assign' && (
+        <SidequestModal
+          sidequest={sqModal.sidequest}
+          onConfirm={() => {
+            sq.confirmAssignment(sqModal.playerId, sqModal.sidequest);
+            setSqModal(null);
+          }}
+        />
+      )}
+
+      {sqModal?.type === 'check' && (
+        <SidequestCheckModal
+          sidequest={sqModal.sidequest}
+          playerName={sqModal.playerName}
+          otherPlayers={players.filter((p) => p.id !== sqModal.playerId).map((p) => p.name)}
+          onResolve={(outcome, catcherName) => {
+            sq.resolveSidequest(sqModal.playerId, sqModal.playerName, outcome, catcherName);
+            setSqModal(null);
+          }}
         />
       )}
     </View>

@@ -20,6 +20,7 @@ import {
 } from '@expo-google-fonts/nunito';
 
 import { colors } from './src/theme/theme';
+import { SidequestProvider } from './src/sidequests/SidequestContext';
 import type { RootStackParamList } from './src/navigation/types';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { GameDetailScreen } from './src/screens/GameDetailScreen';
@@ -64,6 +65,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
+      <SidequestProvider>
       <StatusBar style="light" />
       <NavigationContainer theme={navTheme}>
         <Stack.Navigator
@@ -82,6 +84,7 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
+      </SidequestProvider>
     </SafeAreaProvider>
   );
 }

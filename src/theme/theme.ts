@@ -26,6 +26,9 @@ export const colors = {
   purple: '#A855F7',
   orange: '#FF8A3D',
 
+  // Sidequest modifier accent
+  sidequest: '#FF6B9D',
+
   // Semantic
   danger: '#FF4D4D',
   success: '#34D399',

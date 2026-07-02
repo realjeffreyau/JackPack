@@ -1,6 +1,12 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import type { GameEngineProps } from '../../types/game';
+import { getGame } from '../../data/games';
+import { useSidequestContext } from '../../sidequests/SidequestContext';
+import type { Sidequest } from '../../sidequests/types';
+import { SidequestModal } from '../../components/sidequests/SidequestModal';
+import { SidequestCheckModal } from '../../components/sidequests/SidequestCheckModal';
+import { BackButton } from '../../components/BackButton';
 import { MOLE_QUESTIONS, type MoleCategory, type MoleDifficulty, type MoleQuestion } from '../../data/theMole';
 import { shuffle } from '../../utils/deck';
 import { PlayerSetup } from './components/PlayerSetup';
@@ -37,16 +43,23 @@ interface MolePlayer {
 }
 
 const DIFFICULTY_POINTS: Record<MoleDifficulty, { groupPoints: number; molePoints: number }> = {
-  easy:       { groupPoints: 75,  molePoints: 150 },
-  medium:     { groupPoints: 100, molePoints: 100 },
-  hard:       { groupPoints: 150, molePoints: 75  },
-  impossible: { groupPoints: 200, molePoints: 50  },
+  easy:       { groupPoints: 75,  molePoints: 180 },
+  medium:     { groupPoints: 100, molePoints: 130 },
+  hard:       { groupPoints: 150, molePoints: 100 },
+  impossible: { groupPoints: 200, molePoints: 70  },
 };
 
 // ── Balance knobs ────────────────────────────────────────────────────────────
 // Auto-win pots are scaled per side from rounds × difficulty × player count.
-const GROUP_FACTOR = 0.70; // group must hit ~70% of perfect play to auto-win
-const MOLE_FACTOR = 0.70;  // mole must hit ~70% of a strong sabotage run
+// Factor bump (0.70→0.92, +31%) compounds multiplicatively with the mole's
+// richer per-question take above (~+30% per tier), so the mole's threshold
+// rose ~70% even though its pot fills faster per wrong answer — e.g. 6
+// players / 6 rounds / medium: old threshold round50(6*100*6*0.70)=2500,
+// new round50(6*130*6*0.92)=4300. Net effect: more rounds needed to cross
+// the line, so games reach the final vote far more often instead of
+// auto-winning early.
+const GROUP_FACTOR = 0.92; // group must hit ~92% of perfect play to auto-win
+const MOLE_FACTOR = 0.92;  // mole must hit ~92% of a strong sabotage run
 // Voting bonuses (all-or-nothing) added to the totals after the final vote.
 const CATCH_FACTOR = 1.0;   // group reward when the mole is caught by majority
 const EVASION_FACTOR = 0.5; // mole reward (× rounds) when it dodges a majority vote
@@ -72,7 +85,18 @@ function computeThresholds(playerCount: number, rounds: number, diffs: MoleDiffi
   };
 }
 
+type SqModalState = {
+  type: 'assign' | 'check';
+  playerId: string;
+  playerName: string;
+  sidequest: Sidequest;
+} | null;
+
 export function TheMoleEngine({ roundLength, totalRounds, revealChoices = false, onExit }: GameEngineProps) {
+  const sq = useSidequestContext();
+  const sqSupported = !!(getGame('the-mole')?.supportsSidequests) && sq.enabled;
+  const [sqModal, setSqModal] = useState<SqModalState>(null);
+
   const [phase, setPhase] = useState<Phase>('player_setup');
   const [players, setPlayers] = useState<MolePlayer[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<MoleCategory[]>([]);
@@ -145,8 +169,9 @@ export function TheMoleEngine({ roundLength, totalRounds, revealChoices = false,
     setGroupThreshold(gT);
     setMoleThreshold(mT);
     setCurrentPlayerIndex(0);
+    if (sqSupported) sq.startSession(players.map((p) => ({ id: p.id, name: p.name })));
     setPhase('role_reveal_gate');
-  }, [players.length, totalRounds]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [players.length, totalRounds, sqSupported, sq]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Role reveal loop ───────────────────────────────────────────────────────
 
@@ -302,7 +327,42 @@ export function TheMoleEngine({ roundLength, totalRounds, revealChoices = false,
 
   // ── Game over ──────────────────────────────────────────────────────────────
 
+  function showSidequestFor(playerId: string, playerName: string) {
+    const pending = sq.getPendingSidequest(playerId);
+    if (pending) {
+      setSqModal({ type: 'check', playerId, playerName, sidequest: pending });
+      return;
+    }
+    const newSq = sq.checkTrigger(playerId);
+    if (newSq) {
+      setSqModal({ type: 'assign', playerId, playerName, sidequest: newSq });
+    }
+  }
+
+  // Sidequest triggers at private player moments
+  useEffect(() => {
+    if (!sqSupported || phase !== 'role_reveal' || sqModal) return;
+    const p = players[currentPlayerIndex];
+    if (p) showSidequestFor(p.id, p.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, currentPlayerIndex, sqSupported]);
+
+  useEffect(() => {
+    if (!sqSupported || phase !== 'trivia_answer' || sqModal) return;
+    const p = players[currentPlayerIndex];
+    if (p) showSidequestFor(p.id, p.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, currentPlayerIndex, sqSupported]);
+
+  useEffect(() => {
+    if (!sqSupported || phase !== 'vote_cast' || sqModal) return;
+    const p = players[currentPlayerIndex];
+    if (p) showSidequestFor(p.id, p.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, currentPlayerIndex, sqSupported]);
+
   const handlePlayAgain = useCallback(() => {
+    if (sqSupported) sq.endSession();
     setPhase('player_setup');
     setPlayers([]);
     setSelectedCategories([]);
@@ -332,32 +392,73 @@ export function TheMoleEngine({ roundLength, totalRounds, revealChoices = false,
   const confirmExit = useCallback(() => {
     Alert.alert('Quit game?', 'All progress will be lost.', [
       { text: 'Keep playing', style: 'cancel' },
-      { text: 'Quit', style: 'destructive', onPress: onExit },
+      { text: 'Quit', style: 'destructive', onPress: () => { if (sqSupported) sq.endSession(); onExit(); } },
     ]);
-  }, [onExit]);
+  }, [onExit, sqSupported, sq]);
 
   // ── Render ─────────────────────────────────────────────────────────────────
+
+  if (sqSupported && sqModal?.type === 'assign') {
+    return (
+      <SidequestModal
+        sidequest={sqModal.sidequest}
+        onConfirm={() => {
+          sq.confirmAssignment(sqModal.playerId, sqModal.sidequest);
+          setSqModal(null);
+        }}
+      />
+    );
+  }
+
+  if (sqSupported && sqModal?.type === 'check') {
+    return (
+      <SidequestCheckModal
+        sidequest={sqModal.sidequest}
+        playerName={sqModal.playerName}
+        otherPlayers={players.filter((p) => p.id !== sqModal.playerId).map((p) => p.name)}
+        onResolve={(outcome, catcherName) => {
+          sq.resolveSidequest(sqModal.playerId, sqModal.playerName, outcome, catcherName);
+          setSqModal(null);
+        }}
+      />
+    );
+  }
 
   if (phase === 'player_setup') {
     return <PlayerSetup onDone={handlePlayersDone} onExit={onExit} initialNames={prevNames} />;
   }
 
   if (phase === 'difficulty_select') {
-    return <DifficultySelect onDone={handleDifficultiesDone} />;
+    return (
+      <>
+        <DifficultySelect onDone={handleDifficultiesDone} />
+        <BackButton onPress={() => setPhase('player_setup')} />
+      </>
+    );
   }
 
   if (phase === 'category_select') {
-    return <CategorySelect onDone={handleCategoriesDone} />;
+    return (
+      <>
+        <CategorySelect onDone={handleCategoriesDone} />
+        <BackButton onPress={() => setPhase('difficulty_select')} />
+      </>
+    );
   }
 
   if (phase === 'role_reveal_gate') {
     const player = players[currentPlayerIndex];
     return (
-      <PrivacyGate
-        playerName={player.name}
-        context="Your role is waiting. Do not show anyone else."
-        onReveal={handleRoleGateReveal}
-      />
+      <>
+        <PrivacyGate
+          playerName={player.name}
+          context="Your role is waiting. Do not show anyone else."
+          onReveal={handleRoleGateReveal}
+        />
+        {currentPlayerIndex === 0 && (
+          <BackButton onPress={() => setPhase('category_select')} />
+        )}
+      </>
     );
   }
 
@@ -465,7 +566,7 @@ export function TheMoleEngine({ roundLength, totalRounds, revealChoices = false,
         moleCaught={moleCaught}
         voteBonus={voteBonus}
         onPlayAgain={handlePlayAgain}
-        onExit={onExit}
+        onExit={() => { if (sqSupported) sq.endSession(); onExit(); }}
       />
     );
   }

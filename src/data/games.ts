@@ -74,6 +74,7 @@ export const GAMES: readonly Game[] = [
       minRounds: 2,
       maxRounds: 10,
     },
+    supportsSidequests: true,
   },
   {
     id: 'the-mole',
@@ -107,6 +108,7 @@ export const GAMES: readonly Game[] = [
       roundLengthStep: 30,
       defaultRevealChoices: false,
     },
+    supportsSidequests: true,
   },
   {
     id: 'outblurt',
@@ -150,26 +152,7 @@ export const GAMES: readonly Game[] = [
     minPlayers: 4,
     maxPlayers: 8,
     hasSettings: false,
-  },
-  {
-    id: 'secret-agenda',
-    name: 'Secret Agenda',
-    tagline: 'Get a hidden objective, influence the vote, then reveal who pulled it off.',
-    description:
-      'Everyone gets a hidden objective. Discuss the prompt, influence the vote, then reveal who secretly completed their agenda.',
-    instructions: [
-      'Each player privately receives one secret agenda — keep it hidden.',
-      'A public prompt appears. Everyone discusses and tries to influence the vote.',
-      'Vote out loud, by pointing, or by show of hands.',
-      'The host enters the final vote counts.',
-      'The app reveals all agendas — if yours succeeded, you score a point.',
-      'Most points wins after the final round.',
-    ],
-    icon: '🎭',
-    accent: colors.cyan,
-    minPlayers: 3,
-    maxPlayers: 12,
-    hasSettings: false,
+    supportsSidequests: true,
   },
 ];
 
