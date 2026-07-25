@@ -154,6 +154,49 @@ export const GAMES: readonly Game[] = [
     hasSettings: false,
     supportsSidequests: true,
   },
+  {
+    id: 'drink-if-you-smile',
+    name: 'Drink if You Smile',
+    tagline: 'Test everyone\'s poker face.',
+    description:
+      'Draw a secret prompt, pick a target, and act it out to make them crack. If they laugh, they drink and you score. If they hold a straight face, you drink instead. Play responsibly.',
+    instructions: [
+      'Enter all player names, then pick a win mode and act-out timer.',
+      'On your turn, privately draw a secret acting prompt.',
+      'Pick a target from the group.',
+      'Act out the prompt — miming, faces, noises — without saying it out loud.',
+      'When the timer ends (or you finish early), the group calls the verdict.',
+      'If your target laughs, they drink and you score a point.',
+      'If they keep a straight face, you drink and they score a point.',
+      'Race to the points target, or play until the host ends the game — fewest drinks wins.',
+    ],
+    icon: '😏',
+    accent: colors.orange,
+    minPlayers: 3,
+    maxPlayers: 10,
+    hasSettings: false,
+  },
+  {
+    id: 'likely-to',
+    name: 'Likely To',
+    tagline: 'For the friend group that can take a joke.',
+    description:
+      'One player is the Judge and draws a "most likely to" card. The group argues out loud over who fits it, and the Judge hands out the badge of shame. There are no winners here — only losers.',
+    instructions: [
+      'Enter all player names, then set how many cards it takes to lose.',
+      'Pass the phone to the Judge — they draw and read the card out loud.',
+      'Everyone argues out loud over who fits the prompt best.',
+      'The Judge awards the card to whoever they think earned it (not themselves).',
+      'That player takes the card as a badge of shame.',
+      'The Judge role rotates to the next player each round.',
+      'First player to hit the card target becomes the Ultimate Loser.',
+    ],
+    icon: '🫵',
+    accent: colors.primary,
+    minPlayers: 3,
+    maxPlayers: 10,
+    hasSettings: false,
+  },
 ];
 
 export function getGame(id: string): Game | undefined {

@@ -25,6 +25,13 @@ import type { RootStackParamList } from './src/navigation/types';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { GameDetailScreen } from './src/screens/GameDetailScreen';
 import { GamePlayScreen } from './src/screens/GamePlayScreen';
+import { CreateLobbyScreen } from './src/screens/CreateLobbyScreen';
+import { JoinLobbyScreen } from './src/screens/JoinLobbyScreen';
+import { WaitingRoomScreen } from './src/screens/WaitingRoomScreen';
+import { MultiGameDetailScreen } from './src/screens/MultiGameDetailScreen';
+import { WitlashGameScreen } from './src/screens/WitlashGameScreen';
+import { OotlGameScreen } from './src/screens/OotlGameScreen';
+import { SpymasterGameScreen } from './src/screens/SpymasterGameScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -80,6 +87,25 @@ export default function App() {
           <Stack.Screen
             name="GamePlay"
             component={GamePlayScreen}
+            options={{ gestureEnabled: false, animation: 'fade' }}
+          />
+          <Stack.Screen name="CreateLobby" component={CreateLobbyScreen} />
+          <Stack.Screen name="JoinLobby" component={JoinLobbyScreen} />
+          <Stack.Screen name="WaitingRoom" component={WaitingRoomScreen} />
+          <Stack.Screen name="MultiGameDetail" component={MultiGameDetailScreen} />
+          <Stack.Screen
+            name="WitlashGame"
+            component={WitlashGameScreen}
+            options={{ gestureEnabled: false, animation: 'fade' }}
+          />
+          <Stack.Screen
+            name="OotlGame"
+            component={OotlGameScreen}
+            options={{ gestureEnabled: false, animation: 'fade' }}
+          />
+          <Stack.Screen
+            name="SpymasterGame"
+            component={SpymasterGameScreen}
             options={{ gestureEnabled: false, animation: 'fade' }}
           />
         </Stack.Navigator>

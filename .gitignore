@@ -7,3 +7,13 @@ web-build/
 *.log
 .DS_Store
 *.orig.*
+
+# Local secrets (Supabase keys) — never commit
+.env
+.env.local
+
+# codex-orchestrate scratch state
+.codex-orchestrate/
+
+# graphify generated reports — regenerate on demand, not source
+graphify-out/
