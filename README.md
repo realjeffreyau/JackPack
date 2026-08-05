@@ -1,6 +1,6 @@
-# Jackpack 🎉
+# JackPack 🎉
 
-Jackpack is a playful party-game collection built with Expo, React Native, and TypeScript. It supports both pass-and-play games on one phone and optional multiplayer lobbies where each player uses their own device.
+JackPack is a playful party-game collection built with Expo, React Native, and TypeScript. It supports both pass-and-play games on one phone and optional multiplayer lobbies where each player uses their own device.
 
 ## What is included
 
@@ -76,8 +76,8 @@ Adding a single-phone game normally means adding one catalog entry, one engine, 
 
 ## Original project content
 
-The source, prompts, UI copy, and game concepts in this repository were written for Jackpack. The repository does not include third-party game assets, private API credentials, or proprietary source material. Jackpack is an independent project and is not affiliated with any other party-game publisher.
+The source, prompts, UI copy, and game concepts in this repository were written for JackPack. The repository does not include third-party game assets, private API credentials, or proprietary source material. JackPack is an independent project and is not affiliated with any other party-game publisher.
 
 ## License
 
-Jackpack is released under the [MIT License](LICENSE).
+JackPack is released under the [MIT License](LICENSE).

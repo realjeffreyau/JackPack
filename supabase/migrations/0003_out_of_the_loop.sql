@@ -1,4 +1,4 @@
--- Jackpack — The Outsider (Stage 3)
+-- JackPack — The Outsider (Stage 3)
 -- Run this once in the Supabase SQL editor, after 0001 and 0002.
 -- Adds ootl_votes. Everything else (roles, topic, speaking order, phase)
 -- lives in game_sessions.state — see src/multiplayer/ootl/types.ts.

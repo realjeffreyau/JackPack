@@ -1,4 +1,4 @@
--- Jackpack — Multiplayer Foundation (Stage 1)
+-- JackPack — Multiplayer Foundation (Stage 1)
 -- Run this once in the Supabase SQL editor for your project.
 -- Tables: lobbies, lobby_players, game_sessions (placeholder for future games).
 --

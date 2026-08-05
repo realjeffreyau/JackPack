@@ -1,4 +1,4 @@
--- Jackpack — Witlash (Stage 2)
+-- JackPack — Witlash (Stage 2)
 -- Run this once in the Supabase SQL editor, after 0001_multiplayer_foundation.sql.
 -- Adds the game-specific tables for Witlash (funny-answer voting game).
 --
