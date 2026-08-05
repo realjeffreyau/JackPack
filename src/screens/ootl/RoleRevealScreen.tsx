@@ -47,7 +47,7 @@ export function RoleRevealScreen({
       ) : isOutsider ? (
         <View style={[styles.card, styles.cardOutsider]}>
           <Ionicons name="help-circle" size={48} color={colors.danger} />
-          <Text style={styles.cardTitle}>You are OUT OF THE LOOP</Text>
+          <Text style={styles.cardTitle}>You are THE OUTSIDER</Text>
           <Text style={styles.cardBody}>
             You do not know the secret topic. Listen to the other answers, blend in, and try to
             figure it out.

@@ -16,7 +16,7 @@ const GAME_INFO: Record<
   { label: string; icon: 'happy' | 'help-circle' | 'grid'; accent: string; minPlayers: number; maxPlayers: number; route: 'WitlashGame' | 'OotlGame' | 'SpymasterGame' }
 > = {
   witlash: { label: 'Witlash', icon: 'happy', accent: colors.cyan, minPlayers: 3, maxPlayers: 8, route: 'WitlashGame' },
-  'out-of-the-loop': { label: 'Out of the Loop', icon: 'help-circle', accent: colors.purple, minPlayers: 4, maxPlayers: 8, route: 'OotlGame' },
+  'out-of-the-loop': { label: 'The Outsider', icon: 'help-circle', accent: colors.purple, minPlayers: 4, maxPlayers: 8, route: 'OotlGame' },
   spymaster: { label: 'Spymaster', icon: 'grid', accent: colors.cyan, minPlayers: 2, maxPlayers: 2, route: 'SpymasterGame' },
 };
 

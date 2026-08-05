@@ -92,13 +92,13 @@ export function MultiPhoneScreen({ navigation }: MultiPhoneScreenProps) {
             { borderColor: colors.purple + '88', transform: [{ scale: pressed ? 0.98 : 1 }] },
           ]}
           accessibilityRole="button"
-          accessibilityLabel="Out of the Loop"
+          accessibilityLabel="The Outsider"
         >
           <View style={[styles.iconWrap, { backgroundColor: colors.purple + '22' }]}>
             <Text style={styles.icon}>🕵️</Text>
           </View>
           <View style={styles.gameCardBody}>
-            <Text style={styles.gameName}>Out of the Loop</Text>
+            <Text style={styles.gameName}>The Outsider</Text>
             <Text style={styles.gameTagline}>Social deduction — spot the outsider</Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color={colors.textFaint} />

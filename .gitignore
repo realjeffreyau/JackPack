@@ -10,7 +10,15 @@ web-build/
 
 # Local secrets (Supabase keys) — never commit
 .env
-.env.local
+.env.*
+!.env.example
+
+# Personal/editor-only files
+.vscode/settings.json
+
+# Local assistant/tool scratch directories
+codex-orchestrate/
+skill-recommender/
 
 # codex-orchestrate scratch state
 .codex-orchestrate/

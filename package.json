@@ -1,6 +1,13 @@
 {
   "name": "jackpack",
   "version": "1.0.0",
+  "description": "A playful collection of local and online party games built with Expo and React Native.",
+  "author": "Jeffrey Au",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/realjeffreyau/jackpack.git"
+  },
+  "license": "MIT",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -31,6 +38,7 @@
     "react-native-pager-view": "6.9.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
+    "react-native-svg": "15.12.1",
     "react-native-tab-view": "^4.3.1",
     "react-native-url-polyfill": "^3.0.0"
   },

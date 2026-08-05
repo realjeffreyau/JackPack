@@ -1,54 +1,83 @@
-# JackPack 🎉
+# Jackpack 🎉
 
-A single-phone, **pass-the-phone** party game platform built with **Expo + React Native + TypeScript**. Pick a mini-game, read the rules, and play. Ships with **Truth Bomb** fully playable.
+Jackpack is a playful party-game collection built with Expo, React Native, and TypeScript. It supports both pass-and-play games on one phone and optional multiplayer lobbies where each player uses their own device.
 
-## Run it
+## What is included
+
+### Single Phone
+
+Pass one phone around the group and keep the game moving:
+
+- **Truth Bomb** — answer questions before the timer lands on someone.
+- **Paranoia** — vote in secret, interrogate the room, and uncover who fooled whom.
+- **The Mole** — solve trivia while one player quietly sabotages the group.
+- **Outblurt** — describe a word without saying the banned words before the timer explodes.
+- **Verdict** — argue a bizarre case while everyone protects a secret role.
+- **Drink if You Smile** — act out prompts and test everyone’s poker face. Play responsibly.
+- **Likely To** — debate who best fits each “most likely to” prompt.
+- **Signal Sync** — one partner gives a clue and the other places the needle as close as possible to the hidden target.
+
+**Would You Rather** is listed as a future game concept but is not playable yet.
+
+### Multi Phone
+
+Create or join a lobby with a short code. Multiplayer uses anonymous Supabase authentication, Postgres tables, and Realtime updates:
+
+- **Witlash** — submit funny answers and vote on the best one.
+- **The Outsider** — answer a shared prompt and find the player who received a different one.
+- **Spymaster** — coordinate across two phones: one board and one private key.
+
+Multiplayer is optional. Single-phone games work without any backend or network configuration.
+
+## Run it locally
 
 ```bash
 npm install
-npx expo start
+npm run start
 ```
 
-Then press `i` (iOS simulator), `a` (Android emulator), or scan the QR code with **Expo Go**.
+Then press `i` for an iOS simulator, `a` for an Android emulator, or scan the QR code with Expo Go. To run the full production-style check:
 
-> If you hit a dependency version warning, run `npx expo install --fix` to align native modules with your installed Expo SDK.
+```bash
+npm run validate
+```
 
-## Truth Bomb
+`validate` runs the TypeScript compiler and exports an iOS bundle through Metro.
 
-Pass the phone around the circle. A question appears — read it out loud, answer, tap **NEXT**, pass it on. The timer never stops. When it hits **0**, whoever is holding the phone gets the **💣 Truth Bomb** (a dare). Repeat for the chosen number of rounds.
+## Optional multiplayer setup
 
-- Round length and number of rounds are configurable on the detail screen.
-- 35 questions + 20 dares, shuffled with no repeats until the deck resets.
-- Timer turns yellow ≤10s and red ≤5s, with a pulse for urgency.
+Copy `.env.example` to `.env` and add a Supabase project URL plus its public anonymous key:
+
+```bash
+cp .env.example .env
+```
+
+The app only reads `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`. Never put a Supabase service-role key or another private credential in this file or in source control. Run the SQL migrations in `supabase/migrations/` in order, then restart Expo with a cleared cache:
+
+```bash
+npx expo start -c
+```
+
+The included RLS policies are intentionally permissive for a showcase/demo project and are marked with `HARDEN LATER` comments in the migrations. Do not use the demo Supabase project for private or production data without tightening those policies first.
 
 ## Project structure
 
-```
-App.tsx                      # Fonts, navigation, theme
-src/
-  types/game.ts              # Game + GameEngine interfaces
-  theme/theme.ts             # Colors, fonts, spacing, radius tokens
-  data/
-    games.ts                 # Central list of all games
-    truthBomb.ts             # Question + dare banks
-  utils/deck.ts              # Shuffle + no-repeat draw hook
-  hooks/useReducedMotion.ts  # Respects OS "Reduce Motion"
-  navigation/types.ts        # Typed route params
-  components/                # PrimaryButton, GameCard, CountdownDisplay, Stepper
-  screens/                   # Home, GameDetail, GamePlay (generic host)
-  games/
-    registry.ts              # gameId -> engine component
-    truthbomb/TruthBombEngine.tsx
+```text
+App.tsx                     # Fonts, navigation, and app shell
+src/data/games.ts           # Single-phone catalog
+src/games/                  # Single-phone game engines
+src/multiplayer/            # Supabase lobby and multiplayer sessions
+src/screens/                # Navigation screens and phase routers
+src/theme/theme.ts          # Shared colors, typography, spacing, and radius tokens
+supabase/migrations/        # Optional multiplayer database schema
 ```
 
-## Adding a new game
+Adding a single-phone game normally means adding one catalog entry, one engine, and one registry entry. The generic navigation host picks it up automatically.
 
-1. Add a `Game` entry to `src/data/games.ts`.
-2. Build an engine component that accepts `GameEngineProps` (`roundLength`, `totalRounds`, `onExit`).
-3. Register it in `src/games/registry.ts`.
+## Original project content
 
-The home grid, detail screen, and generic `GamePlay` host pick it up automatically. Until an engine is registered, a game shows as **Coming soon** (see `would-you-rather` and `paranoia`).
+The source, prompts, UI copy, and game concepts in this repository were written for Jackpack. The repository does not include third-party game assets, private API credentials, or proprietary source material. Jackpack is an independent project and is not affiliated with any other party-game publisher.
 
-## Design
+## License
 
-Dark, Jackbox-inspired aesthetic — deep indigo surfaces with neon accents, **Fredoka** display + **Nunito** body fonts, big bold touch targets, and motion reserved for high-impact moments (timer urgency, the bomb reveal).
+Jackpack is released under the [MIT License](LICENSE).

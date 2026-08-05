@@ -31,8 +31,8 @@ export function OotlVoteResultsScreen({ caught, outsiderName, topic, tally, isHo
         <Text style={styles.bannerTitle}>{caught ? 'Caught!' : 'They got away'}</Text>
         <Text style={styles.bannerBody}>
           {caught
-            ? `The group correctly identified ${outsiderName} as Out of the Loop.`
-            : `The group failed to identify the outsider. ${outsiderName} was Out of the Loop.`}
+            ? `The group correctly identified ${outsiderName} as The Outsider.`
+            : `The group failed to identify the outsider. ${outsiderName} was The Outsider.`}
         </Text>
         {!caught && (
           <View style={styles.topicPill}>

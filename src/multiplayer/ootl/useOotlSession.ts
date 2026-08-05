@@ -11,7 +11,7 @@ interface UseOotlSessionResult {
   error: string | null;
 }
 
-/** Fetches an Out of the Loop game session + its votes, kept in sync via one realtime channel. */
+/** Fetches a The Outsider game session + its votes, kept in sync via one realtime channel. */
 export function useOotlSession(sessionId: string | null): UseOotlSessionResult {
   const [session, setSession] = useState<GameSession | null>(null);
   const [votes, setVotes] = useState<OotlVote[]>([]);

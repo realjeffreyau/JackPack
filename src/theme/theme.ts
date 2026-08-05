@@ -1,5 +1,5 @@
 /**
- * Central design tokens. Dark, Jackbox-inspired party aesthetic with neon
+ * Central design tokens. Dark, arcade-inspired party aesthetic with neon
  * accents. Fonts are loaded in App.tsx via @expo-google-fonts.
  */
 

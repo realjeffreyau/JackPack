@@ -6,6 +6,7 @@ import { OutblurtEngine } from './outblurt/OutblurtEngine';
 import { VerdictEngine } from './verdict/VerdictEngine';
 import { DrinkIfYouSmileEngine } from './drinkifyousmile/DrinkIfYouSmileEngine';
 import { LikelyToEngine } from './likelyto/LikelyToEngine';
+import { SignalSyncEngine } from './signalsync/SignalSyncEngine';
 
 /**
  * Maps a game id to its playable engine component. To ship a new game, build
@@ -19,6 +20,7 @@ export const GAME_ENGINES: Record<string, GameEngine> = {
   'verdict': VerdictEngine,
   'drink-if-you-smile': DrinkIfYouSmileEngine,
   'likely-to': LikelyToEngine,
+  'signal-sync': SignalSyncEngine,
 };
 
 export function getGameEngine(id: string): GameEngine | undefined {

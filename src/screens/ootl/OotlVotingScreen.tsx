@@ -22,7 +22,7 @@ export function OotlVotingScreen({ players, myVoteAccusedId, onVote, votedCount,
   return (
     <View style={styles.root}>
       <Text style={styles.kicker}>VOTE</Text>
-      <Text style={styles.title}>Who is Out of the Loop?</Text>
+      <Text style={styles.title}>Who is The Outsider?</Text>
 
       <FlatList
         data={players}

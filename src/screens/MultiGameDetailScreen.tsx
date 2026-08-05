@@ -7,7 +7,7 @@ import { colors, fonts, radius, spacing } from '../theme/theme';
 
 const GAME_COPY = {
   witlash: { icon: '🎭', title: 'Witlash', accent: 'cyan' as const },
-  'out-of-the-loop': { icon: '🕵️', title: 'Out of the Loop', accent: 'purple' as const },
+  'out-of-the-loop': { icon: '🕵️', title: 'The Outsider', accent: 'purple' as const },
   spymaster: { icon: '🔡', title: 'Spymaster', accent: 'cyan' as const },
 };
 

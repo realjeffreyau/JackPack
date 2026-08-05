@@ -35,7 +35,7 @@ export function OotlSettingsScreen({ lobbyId, isHost, activePlayerCount }: Props
     try {
       await startOotl(lobbyId, settings);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to start Out of the Loop.');
+      setError(e instanceof Error ? e.message : 'Failed to start The Outsider.');
       setStarting(false);
     }
   };
@@ -61,7 +61,7 @@ export function OotlSettingsScreen({ lobbyId, isHost, activePlayerCount }: Props
 
   return (
     <ScrollView contentContainerStyle={styles.root} showsVerticalScrollIndicator={false}>
-      <Text style={styles.kicker}>OUT OF THE LOOP SETTINGS</Text>
+      <Text style={styles.kicker}>THE OUTSIDER SETTINGS</Text>
       <Text style={styles.title}>Set up the game</Text>
 
       <View style={styles.settingsCard}>
@@ -92,7 +92,7 @@ export function OotlSettingsScreen({ lobbyId, isHost, activePlayerCount }: Props
         <Text style={styles.reason}>
           {activePlayerCount < 4
             ? `Need at least 4 players (${activePlayerCount} here now).`
-            : 'Out of the Loop supports up to 8 players.'}
+            : 'The Outsider supports up to 8 players.'}
         </Text>
       )}
       {error && <Text style={styles.error}>{error}</Text>}

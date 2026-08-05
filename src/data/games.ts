@@ -197,6 +197,26 @@ export const GAMES: readonly Game[] = [
     maxPlayers: 10,
     hasSettings: false,
   },
+  {
+    id: 'signal-sync',
+    name: 'Signal Sync',
+    tagline: 'Say the clue. Find the signal.',
+    description:
+      'Two people share one phone. One of you secretly sees a hidden target on a spectrum and calls out a clue out loud. Pass the phone — your partner drags the needle to where they think it lands. The closer you get, the more you score.',
+    instructions: [
+      'Enter both player names, then choose rounds, a prompt pack, and whether clues are spoken or typed.',
+      'The Clue Giver looks at the phone alone and sees a hidden target on the spectrum.',
+      'Say a one-word or short clue out loud that hints at where the target sits — then hide the target and pass the phone.',
+      'The Guesser drags the needle to where they think the target is and locks it in.',
+      'The target is revealed — the closer your guess, the more points you score together.',
+      'Roles swap each round (unless disabled), and your final accuracy is saved as your best.',
+    ],
+    icon: '📡',
+    accent: colors.cyan,
+    minPlayers: 2,
+    maxPlayers: 2,
+    hasSettings: false,
+  },
 ];
 
 export function getGame(id: string): Game | undefined {

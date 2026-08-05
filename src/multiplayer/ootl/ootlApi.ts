@@ -45,7 +45,7 @@ export async function startOotl(lobbyId: string, settings: OotlSettings): Promis
 
   const playerIds = await getActivePlayerIds(lobbyId);
   if (playerIds.length < 4) throw new Error('Need at least 4 players to start.');
-  if (playerIds.length > 8) throw new Error('Out of the Loop supports up to 8 players.');
+  if (playerIds.length > 8) throw new Error('The Outsider supports up to 8 players.');
 
   await supabase.from('lobby_players').update({ score: 0 }).eq('lobby_id', lobbyId);
 

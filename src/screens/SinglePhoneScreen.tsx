@@ -39,7 +39,7 @@ export function SinglePhoneScreen({ navigation }: SinglePhoneScreenProps) {
           </Pressable>
         </View>
 
-        <Text style={styles.title}>JackPack</Text>
+        <Text style={styles.title}>Jackpack</Text>
         <Text style={styles.subtitle}>
           One phone. Your whole crew. Pick a game and let chaos decide.
         </Text>
