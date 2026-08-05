@@ -5,7 +5,7 @@
   "author": "Jeffrey Au",
   "repository": {
     "type": "git",
-    "url": "https://github.com/realjeffreyau/jackpack.git"
+    "url": "https://github.com/realjeffreyau/JackPack.git"
   },
   "license": "MIT",
   "main": "node_modules/expo/AppEntry.js",
