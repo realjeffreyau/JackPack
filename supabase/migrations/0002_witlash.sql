@@ -2,7 +2,8 @@
 -- Run this once in the Supabase SQL editor, after 0001_multiplayer_foundation.sql.
 -- Adds the game-specific tables for Witlash (funny-answer voting game).
 --
--- RLS is dev-permissive, matching 0001's pattern. HARDEN LATER notes are inline.
+-- RLS is prototype-permissive, matching 0001's pattern. Production boundary
+-- notes are inline.
 -- After running: Database > Replication > enable Realtime for the 4 new tables
 -- (witlash_rounds, witlash_matchups, witlash_answers, witlash_votes).
 
@@ -115,7 +116,7 @@ alter table public.witlash_votes enable row level security;
 -- witlash_rounds / witlash_matchups: fully open to authenticated for read, and
 -- open for write since only the host client issues these writes today (no
 -- server-side host check exists yet).
--- HARDEN LATER: writes should move to a security-definer RPC that verifies the
+-- Before production: writes should move to a security-definer RPC that verifies the
 -- caller is the session's lobby host, per the same pattern noted in 0001 for
 -- kick/host-transfer.
 create policy "witlash_rounds_all_dev" on public.witlash_rounds
@@ -126,7 +127,7 @@ create policy "witlash_matchups_all_dev" on public.witlash_matchups
 
 -- witlash_answers: anyone in the session can read (needed for the host to
 -- compute results and lock rounds); insert/update should be self-only.
--- HARDEN LATER: restrict update to player_id = auth.uid()'s associated
+-- Before production: restrict update to player_id = auth.uid()'s associated
 -- lobby_players row, and restrict select of *other players'* answers until
 -- matchup.status is 'voting' or later (true anonymity requires a view/RPC —
 -- currently anonymity during voting is enforced client-side only).
@@ -142,7 +143,7 @@ create policy "witlash_answers_update_dev" on public.witlash_answers
 -- witlash_votes: anyone can read (needed for tallying + reveal); insert
 -- open — the (matchup_id, voter_player_id) unique constraint is the real
 -- guard against double-voting.
--- HARDEN LATER: restrict insert to voter_player_id matching the caller's own
+-- Before production: restrict insert to voter_player_id matching the caller's own
 -- lobby_players row, and reject inserts where voter_player_id is one of the
 -- matchup's two answerers (currently enforced client-side only).
 create policy "witlash_votes_select_all" on public.witlash_votes

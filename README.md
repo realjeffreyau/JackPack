@@ -1,6 +1,8 @@
-# JackPack 🎉
+# JackPack
 
-JackPack is a playful party-game collection built with Expo, React Native, and TypeScript. It supports both pass-and-play games on one phone and optional multiplayer lobbies where each player uses their own device.
+JackPack is a party-game collection built with Expo, React Native, and TypeScript. It supports pass-and-play games on one phone and optional multiplayer lobbies where each player uses their own device.
+
+> **Project status:** public portfolio project. The single-phone games run locally; multiplayer is an optional prototype integration that requires a Supabase project.
 
 ## What is included
 
@@ -29,14 +31,14 @@ Create or join a lobby with a short code. Multiplayer uses anonymous Supabase au
 
 Multiplayer is optional. Single-phone games work without any backend or network configuration.
 
-## Run it locally
+## Run locally
 
 ```bash
-npm install
+npm ci
 npm run start
 ```
 
-Then press `i` for an iOS simulator, `a` for an Android emulator, or scan the QR code with Expo Go. To run the full production-style check:
+Then press `i` for an iOS simulator, `a` for an Android emulator, or scan the QR code with Expo Go. To run the TypeScript and Metro export check:
 
 ```bash
 npm run validate
@@ -58,7 +60,11 @@ The app only reads `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY
 npx expo start -c
 ```
 
-The included RLS policies are intentionally permissive for a showcase/demo project and are marked with `HARDEN LATER` comments in the migrations. Do not use the demo Supabase project for private or production data without tightening those policies first.
+### Security boundary
+
+The included Supabase migrations are intentionally permissive so the client-side multiplayer prototype can be evaluated quickly. They are **not production authorization policies**: authenticated players can update more game state than a production service should allow, and lobby-code lookup is not protected against enumeration. Use only synthetic/public session data with this prototype. Before a production deployment, move host-controlled writes behind server-side or security-definer checks, scope reads and writes to lobby membership, and add abuse/rate controls.
+
+Single-phone games do not require Supabase and do not use this backend.
 
 ## Project structure
 
@@ -74,7 +80,23 @@ supabase/migrations/        # Optional multiplayer database schema
 
 Adding a single-phone game normally means adding one catalog entry, one engine, and one registry entry. The generic navigation host picks it up automatically.
 
-## Original project content
+## Validation
+
+Run the same check used by CI before opening a pull request:
+
+```bash
+npm run validate
+```
+
+This runs the strict TypeScript compiler and exports an iOS bundle through Metro. The generated validation directory is removed automatically and is ignored by Git.
+
+## Known limitations
+
+- Multiplayer depends on a separately configured Supabase project and the security boundary described above.
+- There is no automated device or simulator test suite in this repository.
+- The app is not configured here for App Store or Google Play submission; platform signing, identifiers, store assets, and release credentials remain deployment-specific.
+
+## Project content
 
 The source, prompts, UI copy, and game concepts in this repository were written for JackPack. The repository does not include third-party game assets, private API credentials, or proprietary source material. JackPack is an independent project and is not affiliated with any other party-game publisher.
 

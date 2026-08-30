@@ -2,9 +2,9 @@
 -- Run this once in the Supabase SQL editor for your project.
 -- Tables: lobbies, lobby_players, game_sessions (placeholder for future games).
 --
--- RLS in this migration is intentionally DEV-FRIENDLY (permissive UPDATE/DELETE
--- policies) to unblock Stage 1 client logic quickly. See the "HARDEN LATER"
--- comments below for what must be tightened before any public/production launch:
+-- RLS in this migration is intentionally prototype-friendly (permissive
+-- UPDATE/DELETE policies) to unblock Stage 1 client logic. See the security
+-- boundary comments below for what must be tightened before production:
 -- restrict UPDATE/DELETE to the row owner or lobby host, move kick/host-transfer
 -- to a security-definer RPC, and protect lobby-code lookups from enumeration.
 
@@ -103,7 +103,7 @@ alter table public.game_sessions enable row level security;
 
 -- lobbies: anyone authenticated (incl. anon-auth) can look up a lobby by code
 -- before joining. INSERT only as your own host id. DELETE (close) host-only.
--- HARDEN LATER: restrict UPDATE to host_auth_user_id = auth.uid(), except for
+-- Before production: restrict UPDATE to host_auth_user_id = auth.uid(), except for
 -- the specific fields a non-host player is allowed to touch (none, today).
 create policy "lobbies_select_all" on public.lobbies
   for select to authenticated using (true);
@@ -118,7 +118,7 @@ create policy "lobbies_delete_host_only" on public.lobbies
   for delete to authenticated using (host_auth_user_id = auth.uid());
 
 -- lobby_players: anyone can see the player list. INSERT only your own row.
--- HARDEN LATER: UPDATE/DELETE should be restricted to auth_user_id = auth.uid()
+-- Before production: UPDATE/DELETE should be restricted to auth_user_id = auth.uid()
 -- (self) for status/heartbeat writes; kicking or host-transfer should move to a
 -- security-definer RPC that verifies the caller is the lobby host, so no client
 -- can arbitrarily kick/promote other players or edit their score.
@@ -135,6 +135,6 @@ create policy "lobby_players_delete_dev" on public.lobby_players
   for delete to authenticated using (true);
 
 -- game_sessions: placeholder table, no game logic yet — fully open to authenticated.
--- HARDEN LATER: scope to lobby members once a real game reads/writes this table.
+-- Before production: scope access to lobby members once game reads/writes this table.
 create policy "game_sessions_all_dev" on public.game_sessions
   for all to authenticated using (true) with check (true);

@@ -3,11 +3,21 @@
   "version": "1.0.0",
   "description": "A playful collection of local and online party games built with Expo and React Native.",
   "author": "Jeffrey Au",
+  "keywords": [
+    "expo",
+    "react-native",
+    "typescript",
+    "party-games",
+    "multiplayer"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/realjeffreyau/JackPack.git"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",

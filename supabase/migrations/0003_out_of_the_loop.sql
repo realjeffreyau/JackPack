@@ -21,7 +21,7 @@ alter table public.ootl_votes enable row level security;
 -- Anyone can read (needed for host tallying + live vote-count display).
 -- Insert open — the (session_id, voter_player_id) unique constraint is the
 -- real guard against double-voting.
--- HARDEN LATER: restrict insert to voter_player_id matching the caller's own
+-- Before production: restrict insert to voter_player_id matching the caller's own
 -- lobby_players row, and reject inserts where accused_player_id === voter's
 -- own player id (self-vote block is currently client-side only).
 create policy "ootl_votes_select_all" on public.ootl_votes
