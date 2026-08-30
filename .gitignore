@@ -15,13 +15,3 @@ web-build/
 
 # Personal/editor-only files
 .vscode/settings.json
-
-# Local assistant/tool scratch directories
-codex-orchestrate/
-skill-recommender/
-
-# codex-orchestrate scratch state
-.codex-orchestrate/
-
-# graphify generated reports — regenerate on demand, not source
-graphify-out/
