@@ -1,15 +1,20 @@
 # Security policy
 
+## Supported versions
+
+| Version | Supported |
+| --- | --- |
+| `main` | Yes |
+| Older snapshots | No |
+
 ## Reporting a vulnerability
 
-Please report suspected vulnerabilities privately through [GitHub's security advisory form](https://github.com/realjeffreyau/JackPack/security/advisories/new). Do not open a public issue for an unpatched vulnerability. Include the affected area, reproduction steps or proof of concept, impact, and any suggested mitigation.
+Please report a suspected vulnerability through [GitHub's private security advisory form](https://github.com/realjeffreyau/JackPack/security/advisories/new). Do not include credentials, personal data, or an exploit in a public issue. Include the affected commit or file, reproduction steps, impact, and a suggested fix when possible.
 
-If private reporting is unavailable, contact the repository owner through a private channel before sharing details publicly.
+## Scope and demo boundaries
 
-## Scope
+JackPack is a public Expo/React Native showcase. It has no private server API and does not embed service-role credentials, signing keys, or other private secrets. The optional multiplayer client reads only `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`; these are public client configuration values, not substitutes for authorization.
 
-Reports are especially useful for authentication, lobby access, unauthorized game-state changes, data exposure, dependency vulnerabilities, or accidental disclosure of credentials. The optional Supabase policies are explicitly prototype-level; their documented limitations are not a production security guarantee.
+The SQL migrations in `supabase/migrations/` intentionally use permissive development row-level-security policies so the multiplayer demo can be evaluated easily. Each exception is marked `HARDEN LATER`. Do not connect this demo schema to private, production, or regulated data. A real deployment must use its own Supabase project and enforce server-side membership checks, state-transition authorization, input limits, rate limits, and appropriate data retention before it is exposed to untrusted users.
 
-## Secret handling
-
-Never commit `.env`, Supabase service-role keys, database credentials, access tokens, private user data, or generated invite/session data. The Expo public anonymous key is not a substitute for server-side authorization. If a credential is exposed, revoke or rotate it immediately and review the affected history and deployment logs.
+Never commit `.env`, a Supabase service-role key, database passwords, signing material, or user data. If a credential is exposed, revoke and rotate it immediately and open a private advisory.

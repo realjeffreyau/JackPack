@@ -1,5 +1,7 @@
 # JackPack
 
+[![CI](https://github.com/realjeffreyau/JackPack/actions/workflows/ci.yml/badge.svg)](https://github.com/realjeffreyau/JackPack/actions/workflows/ci.yml) [![CodeQL](https://github.com/realjeffreyau/JackPack/actions/workflows/codeql.yml/badge.svg)](https://github.com/realjeffreyau/JackPack/actions/workflows/codeql.yml)
+
 JackPack is a party-game collection built with Expo, React Native, and TypeScript. It supports pass-and-play games on one phone and optional multiplayer lobbies where each player uses their own device.
 
 > **Project status:** public portfolio project. The single-phone games run locally; multiplayer is an optional prototype integration that requires a Supabase project.
@@ -31,21 +33,42 @@ Create or join a lobby with a short code. Multiplayer uses anonymous Supabase au
 
 Multiplayer is optional. Single-phone games work without any backend or network configuration.
 
-## Run locally
+## Download
 
-```bash
+[Download the latest JackPack source as a ZIP](https://github.com/realjeffreyau/JackPack/archive/refs/heads/main.zip) or [browse the repository](https://github.com/realjeffreyau/JackPack). This is a source download for Expo; there is not currently a prebuilt App Store or APK release.
+
+## Setup
+
+### Requirements
+
+- Node.js **20.19.4 or newer**
+- npm (included with Node.js)
+- Expo Go on a phone, or Xcode/Android Studio for a simulator or emulator
+
+### Install from GitHub
+
+Clone the repository, install the locked dependency tree, and start Expo:
+
+`bash
+git clone https://github.com/realjeffreyau/JackPack.git
+cd JackPack
 npm ci
 npm run start
-```
+`
 
-Then press `i` for an iOS simulator, `a` for an Android emulator, or scan the QR code with Expo Go. To run the TypeScript and Metro export check:
+If you downloaded the ZIP, unzip it, open a terminal in the extracted `JackPack` folder, and run `npm ci` followed by `npm run start`.
 
-```bash
+When Expo is running, press `i` for an iOS simulator, `a` for an Android emulator, or scan the QR code with Expo Go. No account, API key, or environment file is needed for the single-phone games.
+
+Before opening a pull request or sharing a change, run the same checks used by GitHub Actions:
+
+`bash
+npm run typecheck
 npm run validate
-```
+npm audit --audit-level=moderate
+`
 
-`validate` runs the TypeScript compiler and exports an iOS bundle through Metro.
-
+`validate` runs the TypeScript compiler and exports an iOS bundle through Metro. `npm ci` is intentionally used for reproducible installs; do not replace the committed lockfile with an unreviewed dependency update.
 ## Optional multiplayer setup
 
 Copy `.env.example` to `.env` and add a Supabase project URL plus its public anonymous key:
