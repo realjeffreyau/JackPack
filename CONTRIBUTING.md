@@ -4,7 +4,7 @@ Thanks for helping improve JackPack. Keep changes focused on the party-game expe
 
 ## Local setup
 
-Use Node.js 20 or newer and npm:
+Use Node.js 20.19.4 or newer and npm:
 
 ```bash
 npm ci
