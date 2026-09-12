@@ -49,12 +49,12 @@ Multiplayer is optional. Single-phone games work without any backend or network 
 
 Clone the repository, install the locked dependency tree, and start Expo:
 
-`bash
+```bash
 git clone https://github.com/realjeffreyau/JackPack.git
 cd JackPack
 npm ci
 npm run start
-`
+```
 
 If you downloaded the ZIP, unzip it, open a terminal in the extracted `JackPack` folder, and run `npm ci` followed by `npm run start`.
 
@@ -62,13 +62,14 @@ When Expo is running, press `i` for an iOS simulator, `a` for an Android emulato
 
 Before opening a pull request or sharing a change, run the same checks used by GitHub Actions:
 
-`bash
+```bash
 npm run typecheck
 npm run validate
 npm audit --audit-level=moderate
-`
+```
 
 `validate` runs the TypeScript compiler and exports an iOS bundle through Metro. `npm ci` is intentionally used for reproducible installs; do not replace the committed lockfile with an unreviewed dependency update.
+
 ## Optional multiplayer setup
 
 Copy `.env.example` to `.env` and add a Supabase project URL plus its public anonymous key:
